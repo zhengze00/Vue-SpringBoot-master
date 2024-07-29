@@ -1,0 +1,41 @@
+@font-face {
+    font-family: "NotoSans";
+    font-style: normal;
+    font-weight: 100;
+    src: url(../font/NotoSans/notokr-thin.eot);
+    src: url(../font/NotoSans/notokr-thin.eot?#iefix) format("embedded-opentype"), url(../font/NotoSans/notokr-thin.woff) format("woff"), url(../font/NotoSans/notokr-thin.ttf) format("truetype");
+    /* url(../font/NotoSans/notokr-thin.svg#notokr-thin) format('svg'); */
+}
+@font-face {
+    font-family: "NotoSans";
+    font-style: normal;
+    font-weight: 300;
+    src: url(../font/NotoSans/notokr-light.eot);
+    src: url(../font/NotoSans/notokr-light.eot?#iefix) format("embedded-opentype"), url(../font/NotoSans/notokr-light.woff) format("woff"), url(../font/NotoSans/notokr-light.ttf) format("truetype");
+    /* url(../font/NotoSans/notokr-light.svg#notokr-light) format('svg'); */
+}
+@font-face {
+    font-family: "NotoSans";
+    font-style: normal;
+    font-weight: 500;
+    src: url(../font/NotoSans/notokr-regular.eot);
+    src: url(../font/NotoSans/notokr-regular.eot?#iefix) format("embedded-opentype"), url(../font/NotoSans/notokr-regular.woff) format("woff"), url(../font/NotoSans/notokr-regular.ttf) format("truetype");
+    /* url(../font/NotoSans/notokr-regular.svg#notokr-regular) format('svg'); */
+}
+
+@font-face {
+    font-family: "NotoSans";
+    font-style: normal;
+    font-weight: 700;
+    src: url(../font/NotoSans/notokr-medium.eot);
+    src: url(../font/NotoSans/notokr-medium.eot?#iefix) format("embedded-opentype"), url(../font/NotoSans/notokr-medium.woff) format("woff"), url(../font/NotoSans/notokr-medium.ttf) format("truetype");
+    /* url(../font/NotoSans/notokr-medium.svg#notokr-medium) format('svg'); */
+}
+@font-face {
+    font-family: "NotoSans";
+    font-style: normal;
+    font-weight: 900;
+    src: url(../font/NotoSans/notokr-bold.eot);
+    src: url(../font/NotoSans/notokr-bold.eot?#iefix) format("embedded-opentype"), url(../font/NotoSans/notokr-bold.woff) format("woff"), url(../font/NotoSans/notokr-bold.ttf) format("truetype");
+    /* url(../font/NotoSans/notokr-bold.svg#notokr-bold) format('svg'); */
+}
