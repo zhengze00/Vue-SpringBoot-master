@@ -9,10 +9,23 @@
           <li class="sub on">
             <a  class="active">GLVS</a>
             <ul class="lnb-menu-sub" style="display: block">
-              <li><a  class="active">VIPNUMBER</a></li>
+              <li><a  class="active">SEARCH NUMBER</a></li>
+            </ul>
+          </li>
+          <li class="sub">
+            <a href="#none">AGENT</a>
+            <ul class="lnb-menu-sub">
+              <li><a href="#none">UPLOAD</a></li>
+            </ul>
+          </li>
+          <li class="sub">
+            <a href="#none">ADMIN</a>
+            <ul class="lnb-menu-sub">
+              <li><a href="#none">OwnerSoldCostList</a></li>
             </ul>
           </li>
         </ul>
+
       </aside>
       <div class="content">
         <div class="content-tit">
@@ -115,46 +128,58 @@
                 <th colspan="3">EIGW</th>
             </tr> -->
             <tr>
+              <th>ID</th>
               <th>PHONE NO</th>
+              <th>PREFIX NO</th>
               <th>CATEGORY</th>
-              <th>PREFIX NUMBER</th>
               <th>MYR</th>
               <th>KRW</th>
               <th>STATUS</th>
-              <th>UPLOAD DATE</th>
               <th>CONTACT US</th>
+              <th>REGISTER NAME</th>
+              <th>REGISTER DATE</th>
+              <th>AUDIT NAME</th>
+              <th>AUDIT DATE</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="PhNo in PhNos" :key="PhNo.id">
-              <td>{{ PhNo.number }}</td>
-              <td>{{ PhNo.category }}</td>
-              <td>{{ PhNo.phone_prefix }}</td>
-              <td>{{ PhNo.price_myr }}</td>
-              <td>{{ PhNo.status }}</td>
-              <td>{{ PhNo.status_date }}</td>
-              <td>{{ PhNo.upload_date }}</td>
-              <td>{{ PhNo.seller_id }}</td>
+            <tr v-for="salePhnNum in salePhnNums" :key="salePhnNum.id">
+              <td>{{ salePhnNum.sale_id }}</td>
+              <td>{{ salePhnNum.sale_phn_num }}</td>
+              <td>{{ salePhnNum.sale_phn_pfx }}</td>
+              <td>{{ salePhnNum.sale_ctgr_cd }}</td>
+              <td>RM {{ salePhnNum.sale_price.toFixed(2) }}</td>
+              <td>{{ (salePhnNum.sale_price * 280) }} Won</td>
+              <td>{{ salePhnNum.sale_status }}</td>
+              <td>{{ salePhnNum.sale_contact }}</td>
+              <td>{{ salePhnNum.rgst_nm }}</td>
+              <td>{{ salePhnNum.rgst_dtm }}</td>
+              <td>{{ salePhnNum.audit_nm }}</td>
+              <td>{{ salePhnNum.audit_dtm }}</td>
             </tr>
             </tbody>
           </table>
           <!-- //table-style -->
 
-          <div class="pageing">
-            <a href="#none" class="first"></a>
-            <a href="#none" class="pre"></a>
-            <a href="#none" class="selected">1</a>
-            <a href="#none">2</a>
-            <a href="#none">3</a>
-            <a href="#none">4</a>
-            <a href="#none">5</a>
-            <a href="#none">6</a>
-            <a href="#none">7</a>
-            <a href="#none">8</a>
-            <a href="#none">9</a>
-            <a href="#none">10</a>
-            <a href="#none" class="next"></a>
-            <a href="#none" class="last"></a>
+           <div class="pageing">
+              <a href="#none" class="first"></a>
+              <a href="#none" class="pre"></a>
+              <a href="#none" class="selected">1</a>
+              <a href="#none">2</a>
+              <a href="#none">3</a>
+              <a href="#none">4</a>
+              <a href="#none">5</a>
+              <a href="#none">6</a>
+              <a href="#none">7</a>
+              <a href="#none">8</a>
+              <a href="#none">9</a>
+              <a href="#none">10</a>
+              <a href="#none" class="next"></a>
+              <a href="#none" class="last"></a>
+          </div>
+          <div class="btn-area">
+            <a href="#none" class="type2">Sales Status</a>
+            <a href="#none" class="">Agent Login</a>
           </div>
         </div>
       </div>
@@ -166,20 +191,20 @@
 import axios from 'axios';
 
 export default {
-  PhNo() {
+  data() {
     return {
-      PhNos: []
+      salePhnNums: []
     };
   },
   // dosjdod
   created() {
-    this.fetchPhNos();
+    this.fetchSalePhnNums();
   },
   methods: {
-    async fetchPhNos() {
+    async fetchSalePhnNums() {
       try {
-        const response = await axios.get('http://localhost:8080/getPhNo');
-        this.PhNos = response.PhNo;
+        const response = await axios.get('http://localhost:8081/getSalePhnNum');
+        this.salePhnNums = response.data;
       } catch (error) {
         console.error('Error fetching components:', error);
       }
@@ -188,5 +213,7 @@ export default {
 };
 </script>
 
-<style scoped src="@/assets/common.css">
+<style scoped>
+@import "@/assets/common_new.css";
+@import "@/assets/reset.css";
 </style>

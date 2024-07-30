@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import PageHome from '@/views/PageHome.vue'
 import BoardList from '@/views/board/BoardList.vue'
-import ComponentPage from '@/views/componentpage/ComponentPage.vue'
-import ManageNumber from '@/views/componentpage/ManageNumber.vue'
-import OwnerSoldCostList from '@/views/componentpage/OwnerSoldCostList.vue'
+import CustomerPage from "@/views/componentpage/CustomerPage.vue";
+import AgentPage from "@/views/componentpage/AgentPage.vue";
+import AdminPage from "@/views/componentpage/AdminPage.vue";
 
 
 const routes = [
@@ -26,19 +26,19 @@ const routes = [
         component: BoardList
     },
     {
-        path: '/componentpage/component',
-        name: 'ComponentPage',
-        component: ComponentPage
+        path: '/customer',
+        name: 'CustomerPage',
+        component: CustomerPage
     },
     {
-        path: '/componentpage/manage',
-        name: 'ManageNumber',
-        component: ManageNumber
+        path: '/agent',
+        name: 'AgentPage',
+        component: AgentPage
     },
     {
-        path: '/componentpage/costlist',
-        name: 'OwnerSoldCostList',
-        component: OwnerSoldCostList
+        path: '/admin',
+        name: 'AdminPage',
+        component: AdminPage
     }
 ]
 
