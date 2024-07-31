@@ -32,7 +32,6 @@
           <h2 class="tit">GLVS</h2>
           <ul class="navigation">
             <li>HOME</li>
-            <li>매타정보조회</li>
             <li>GLVS</li>
           </ul>
         </div>
@@ -101,10 +100,19 @@
             </ul>
 
             <div class="search-btn">
-              <button type="button">검색</button>
-              <button type="button" class="type2">초기화</button>
+              <button type="button">Search</button>
             </div>
+
+            <div class="search-btn">
+              <button type="button" class="type2">Reset</button>
+            </div>
+
+            <div class="search-btn">
+              <button type="button" class="type3">Upload Phone Number</button>
+            </div>
+
           </div>
+
           <!-- //search-area -->
 
           <table class="table-style t-center list">
@@ -128,36 +136,29 @@
                 <th colspan="3">EIGW</th>
             </tr> -->
             <tr>
-              <th>ID</th>
-              <th>PHONE NO</th>
               <th>PREFIX NO</th>
               <th>CATEGORY</th>
-              <th>MYR</th>
-              <th>KRW</th>
+              <th>PHONE NUMBER</th>
+              <th>PRICE (MYR/RM)</th>
+              <th>PRICE (KRW/WON)</th>
               <th>STATUS</th>
-              <th>CONTACT US</th>
+              <th>UPLOAD DATE</th>
+              <th>OWNER</th>
+              <th>CONTACT NUMBER</th>
               <th>OPERATION</th>
-              <th>REGISTER NAME</th>
-              <th>REGISTER DATE</th>
-              <th>AUDIT NAME</th>
-              <th>AUDIT DATE</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="salePhnNum in salePhnNums" :key="salePhnNum.id">
-              <td>{{ salePhnNum.sale_id }}</td>
+            <tr v-for="salePhnNum in salePhnNums" :key="salePhnNum.sale_id">
+              <td>{{ salePhnNum.sale_phn_pfx_nm }}</td>
+              <td>{{ salePhnNum.sale_ctgr_nm }}</td>
               <td>{{ salePhnNum.sale_phn_num }}</td>
-              <td>{{ salePhnNum.sale_phn_pfx }}</td>
-              <td>{{ salePhnNum.sale_ctgr_cd }}</td>
-              <td>RM {{ salePhnNum.sale_price.toFixed(2) }}</td>
-              <td>{{ (salePhnNum.sale_price * 280) }} Won</td>
-              <td>{{ salePhnNum.sale_status }}</td>
-              <td>{{ salePhnNum.sale_contact }}</td>
-              <td></td>
+              <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
+              <td>{{ salePhnNum.sale_status_nm }}</td>
+              <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
-              <td>{{ salePhnNum.rgst_dtm }}</td>
-              <td>{{ salePhnNum.audit_nm }}</td>
-              <td>{{ salePhnNum.audit_dtm }}</td>
+              <td>{{ salePhnNum.sale_contact }}</td>
             </tr>
             </tbody>
           </table>
@@ -195,10 +196,10 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      salePhnNums: []
+      salePhnNums: [],
+      exchangeRate: 1 // 默认汇率为1
     };
   },
-  // dosjdod
   created() {
     this.fetchSalePhnNums();
   },
@@ -206,7 +207,8 @@ export default {
     async fetchSalePhnNums() {
       try {
         const response = await axios.get('http://localhost:8081/getSalePhnNum');
-        this.salePhnNums = response.data;
+        this.salePhnNums = response.data.salePhnNums;
+        this.exchangeRate = parseFloat(response.data.exchangeRate); // 获取汇率
       } catch (error) {
         console.error('Error fetching components:', error);
       }

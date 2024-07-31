@@ -32,7 +32,6 @@
           <h2 class="tit">GLVS</h2>
           <ul class="navigation">
             <li>HOME</li>
-            <li>매타정보조회</li>
             <li>GLVS</li>
           </ul>
         </div>
@@ -40,20 +39,60 @@
           <div class="search-area">
             <ul class="search-list">
               <li class="fix">
-                <strong>Owner:</strong>
-                <span class="input-style">
-                                        <input type="text" placeholder="" />
-                                    </span>
-              </li>
-
-              <li class="fix">
-                <strong>Date:</strong>
+                <strong>Phone no:</strong>
                 <span class="input-style">
                                         <input type="text" placeholder="" />
                                     </span>
               </li>
               <li class="fix">
-                <strong>Date:</strong>
+                <strong>Category:</strong>
+                <span class="input-style">
+                                        <select>
+                                          <option>ALL</option>
+                                          <option>0.1.2.3 SERIES</option>
+                                          <option>0.1.9 SERIES</option>
+                                          <option>1314 SERIES</option>
+                                          <option>520 SERIES</option>
+                                          <option>AAA SERIES</option>
+                                          <option>AAAA SERIES</option>
+                                          <option>AAAAA SERIES</option>
+                                          <option>AAAAAA SERIES</option>
+                                          <option>AAAB SERIES</option>
+                                          <option>AABA SERIES</option>
+                                          <option>AABAA SERIES</option>
+                                          <option>AABB SERIES</option>
+                                          <option>AABBCC SERIES</option>
+                                          <option>AABBCCDD SERIES</option>
+                                          <option>AB SERIES</option>
+                                          <option>ABAA SERIES</option>
+                                          <option>ABAA/AABA SERIES</option>
+                                          <option>ABAB SERIES</option>
+                                          <option>ABABAB SERIES</option>
+                                          <option>ABBA SERIES</option>
+                                          <option>ABBB SERIES</option>
+                                          <option>BOSS SERIES</option>
+                                          <option>FENGSHUI 1349 SERIES</option>
+                                          <option>FENGSHUI 2678 SERIES</option>
+                                          <option>ICHING SERIES</option>
+                                          <option>LADDER SERIES</option>
+                                          <option>MATAFIZIK SERIES</option>
+                                          <option>NORMAL SERIES</option>
+                                          <option>ONG 88 SERIES</option>
+                                          <option>OTHER SERIES</option>
+                                          <option>REPEAT SERIES</option>
+                                          <option>THOUSAND NUMBER SERIES</option>
+                                          <option>YEAR SERIES</option>
+                                        </select>
+                                    </span>
+              </li>
+              <li class="fix">
+                <strong>Price Range(Min):</strong>
+                <span class="input-style">
+                                        <input type="text" placeholder="" />
+                                    </span>
+              </li>
+              <li class="fix">
+                <strong>Price Range(Max):</strong>
                 <span class="input-style">
                                         <input type="text" placeholder="" />
                                     </span>
@@ -61,8 +100,11 @@
             </ul>
 
             <div class="search-btn">
-              <button type="button">검색</button>
-              <button type="button" class="type2">초기화</button>
+              <button type="button">Search</button>
+            </div>
+
+            <div class="search-btn">
+              <button type="button" class="type2">Reset</button>
             </div>
           </div>
           <!-- //search-area -->
@@ -88,36 +130,28 @@
                 <th colspan="3">EIGW</th>
             </tr> -->
             <tr>
-              <th>ID</th>
-              <th>PHONE NO</th>
-              <th>MYR</th>
-              <th>KRW</th>
-              <th>OWNER COST (MYR)</th>
-              <th>OWNER COST (KRW)</th>
-              <th>RATE</th>
-              <th>BANK ACCOUNT</th>
-              <th>CONTACT NO</th>
-              <th>REGISTER NAME</th>
-              <th>REGISTER DATE</th>
-              <th>AUDIT NAME</th>
-              <th>AUDIT DATE</th>
+              <th>PREFIX NO</th>
+              <th>CATEGORY</th>
+              <th>PHONE NUMBER</th>
+              <th>PRICE (MYR/RM)</th>
+              <th>PRICE (KRW/WON)</th>
+              <th>STATUS</th>
+              <th>UPLOAD DATE</th>
+              <th>OWNER</th>
+              <th>CONTACT NUMBER</th>
             </tr>
             </thead>
             <tbody>
-            <tr v-for="salePhnNum in salePhnNums" :key="salePhnNum.id">
-              <td>{{ salePhnNum.sale_id }}</td>
+            <tr v-for="salePhnNum in salePhnNums" :key="salePhnNum.sale_id">
+              <td>{{ salePhnNum.sale_phn_pfx_nm }}</td>
+              <td>{{ salePhnNum.sale_ctgr_nm }}</td>
               <td>{{ salePhnNum.sale_phn_num }}</td>
-              <td>RM {{ salePhnNum.sale_price }}</td>
-              <td>{{ (salePhnNum.sale_price * 280) }} Won</td>
-              <td>RM {{ (salePhnNum.sale_price * 90/100) }}</td>
-              <td>{{ (salePhnNum.sale_price * 90/100*280) }} Won</td>
-              <td></td>
-              <td></td>
-              <td>{{ salePhnNum.sale_contact }}</td>
+              <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
+              <td>{{ salePhnNum.sale_status_nm }}</td>
+              <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
-              <td>{{ salePhnNum.rgst_dtm }}</td>
-              <td>{{ salePhnNum.audit_nm }}</td>
-              <td>{{ salePhnNum.audit_dtm }}</td>
+              <td>{{ salePhnNum.sale_contact }}</td>
             </tr>
             </tbody>
           </table>
@@ -155,10 +189,10 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      salePhnNums: []
+      salePhnNums: [],
+      exchangeRate: 1 // 默认汇率为1
     };
   },
-  // dosjdod
   created() {
     this.fetchSalePhnNums();
   },
@@ -166,7 +200,8 @@ export default {
     async fetchSalePhnNums() {
       try {
         const response = await axios.get('http://localhost:8081/getSalePhnNum');
-        this.salePhnNums = response.data;
+        this.salePhnNums = response.data.salePhnNums;
+        this.exchangeRate = parseFloat(response.data.exchangeRate); // 获取汇率
       } catch (error) {
         console.error('Error fetching components:', error);
       }

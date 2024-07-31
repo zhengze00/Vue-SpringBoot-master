@@ -1,7 +1,7 @@
 ﻿@charset "utf-8";
 
 .wrap {
-    min-width: 2000px;
+    min-width: 1600px;
 }
 
 /* Header */
@@ -603,8 +603,8 @@
     /* text-align: center; */
 }
 .search-area .search-btn button {
-    width: 84px;
-    height: 35px;
+    width: 94px;
+    height: 55px;
     font-size: 13px;
     /* background: #43496b; */
     color: #fff;
@@ -615,12 +615,26 @@
     text-align: left;
     background: #43496b url(../images/ico_search.png) no-repeat left 19px center;
 }
+
 .search-area .search-btn button.type2 {
     background: #fff;
     padding: 0;
     text-align: center;
     border: 1px solid #43496b;
     color: #43496b;
+}
+.search-area .search-btn button.type3 {
+    width: 94px;
+    height: 55px;
+    font-size: 12px;
+    /* background: #43496b; */
+    color: #fff;
+    padding-left: 39px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    /* margin: 0 5px; */
+    text-align: left;
+    background: #43496b url(../images/ico_search.png) no-repeat left 19px center;
 }
 .search-area .search-btn button.type3 {
     background: #f07f2b url(../images/ico_plus.png) no-repeat left 19px center;
