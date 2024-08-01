@@ -3,7 +3,8 @@ import PageHome from '@/views/PageHome.vue'
 import BoardList from '@/views/board/BoardList.vue'
 import CustomerPage from "@/views/componentpage/CustomerPage.vue";
 import AgentPage from "@/views/componentpage/AgentPage.vue";
-import AdminPage from "@/views/componentpage/AdminPage.vue";
+import AdminPageSS from "@/views/componentpage/AdminPageSS.vue";
+import AdminPageSC from "@/views/componentpage/AdminPageSC.vue";
 
 
 const routes = [
@@ -36,9 +37,14 @@ const routes = [
         component: AgentPage
     },
     {
-        path: '/admin',
-        name: 'AdminPage',
-        component: AdminPage
+        path: '/admin/salessettlement',
+        name: 'AdminPageSS',
+        component: AdminPageSS
+    },
+    {
+        path: '/admin/settlementcompleted',
+        name: 'AdminPageSC',
+        component: AdminPageSC
     }
 ]
 

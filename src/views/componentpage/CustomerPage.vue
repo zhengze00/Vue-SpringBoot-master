@@ -1,5 +1,6 @@
 
 <template>
+  <PageHeader2/>
   <div class="wrap">
     <!-- container : S -->
     <div class="container">
@@ -9,7 +10,7 @@
           <li class="sub on">
             <a  class="active">GLVS</a>
             <ul class="lnb-menu-sub" style="display: block">
-              <li><a  class="active">SEARCH NUMBER</a></li>
+              <li><a  class="active">Seach Phone Number</a></li>
             </ul>
           </li>
           <li class="sub">
@@ -30,6 +31,7 @@
       <div class="content">
         <div class="content-tit">
           <h2 class="tit">GLVS</h2>
+          <h2 class="tit">Search Phone Number</h2>
           <ul class="navigation">
             <li>HOME</li>
             <li>GLVS</li>
@@ -39,7 +41,7 @@
           <div class="search-area">
             <ul class="search-list">
               <li class="fix">
-                <strong>Phone no:</strong>
+                <strong>Phone number:</strong>
                 <span class="input-style">
                                         <input type="text" placeholder="" />
                                     </span>
@@ -101,16 +103,15 @@
 
             <div class="search-btn">
               <button type="button">Search</button>
-            </div>
-
-            <div class="search-btn">
               <button type="button" class="type2">Reset</button>
             </div>
+
+
           </div>
           <!-- //search-area -->
 
           <table class="table-style t-center list">
-            <!-- <colgroup>
+<!--             <colgroup>
                     <col style="width:100px;">
                     <col style="width:100px;">
                     <col style="width:100px;">
@@ -120,17 +121,15 @@
                     <col style="width:100px;">
                     <col style="width:100px;">
                     <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                </colgroup> -->
+                </colgroup>-->
             <thead>
-            <!-- <tr>
+<!--             <tr>
                 <th rowspan="2">구분</th>
                 <th colspan="7">EAI</th>
                 <th colspan="3">EIGW</th>
-            </tr> -->
+            </tr>-->
             <tr>
-              <th>PREFIX NO</th>
+              <th>PREFIX NUMBER</th>
               <th>CATEGORY</th>
               <th>PHONE NUMBER</th>
               <th>PRICE (MYR/RM)</th>
@@ -174,8 +173,8 @@
               <a href="#none" class="last"></a>
           </div>
           <div class="btn-area">
-            <a href="#none" class="type2">Sales Status</a>
-            <a href="#none" class="">Agent Login</a>
+            <a href="#none" class="">Sales Status </a>
+            <a href="#none" class="next">Agent Login</a>
           </div>
         </div>
       </div>
@@ -184,15 +183,21 @@
 </template>
 
 <script>
+import PageHeader2 from '@/components/PageHeader2';
 import axios from 'axios';
 
 export default {
   data() {
     return {
       salePhnNums: [],
-      exchangeRate: 1 // 默认汇率为1
+      exchangeRate: 1
     };
   },
+
+  components: {
+    PageHeader2
+  },
+
   created() {
     this.fetchSalePhnNums();
   },

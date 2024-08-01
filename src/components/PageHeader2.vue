@@ -1,28 +1,28 @@
 <!-- PageHeader.vue -->
 <template>
- <div class="wrap">
-      <!-- header : S -->
-      <header class="header">
-        <div class="inner">
-          <h1 class="logo">
-            <img src="../images/glvs_logo.png" alt="로고" />
-          </h1>
-          <nav class="gnb-area">
-            <ul class="gnb-menu">
-              <li>
-                <span class="allmenu-btn">ALLMENU</span>
-                <ul class="sub_menu">
-                  <li>Personal Data</li>
-                  <li>Change Password</li>
-                  <li>Logout</li>
-                </ul>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+  <div class="wrap">
+    <!-- header : S -->
+    <header class="header">
+      <div class="inner">
+        <h1 class="logo">
+          <img src="../images/glvs_logo.png" alt="로고" />
+        </h1>
+<!--        <nav class="gnb-area">
+          <ul class="gnb-menu">
+            <li>
+              <span class="allmenu-btn">전체메뉴</span>
+              <ul class="sub_menu">
+                <li>Personal Data</li>
+                <li>Change Password</li>
+                <li>Logout</li>
+              </ul>
+            </li>
+          </ul>
+        </nav>-->
+      </div>
+    </header>
 
-  <!-- header : E -->      <!--      <nav class="gnb-area">
+    <!-- header : E -->      <!--      <nav class="gnb-area">
               <ul class="gnb-menu">
                 <li>
                   <span>개요</span>
@@ -103,8 +103,8 @@
           </div>
         </header>
         </div>-->
-  <!-- header : E -->
-</div>
+    <!-- header : E -->
+  </div>
 </template>
 
 <script>

@@ -10,16 +10,14 @@
           <li class="sub">
             <a  class="">GLVS</a>
           </li>
-          <li class="sub on">
-            <a  class="active">AGENT</a>
-            <ul class="lnb-menu-sub" style="display: block">
-              <li><a  class="active">Manage Phone Number</a></li>
-            </ul>
-          </li>
           <li class="sub">
-            <a href="#none">ADMIN</a>
-            <ul class="lnb-menu-sub">
-              <li><a href="#none">OwnerSoldCostList</a></li>
+            <a href="#none">AGENT</a>
+          </li>
+          <li class="sub on">
+            <a  class="active">ADMIN</a>
+            <ul class="lnb-menu-sub" style="display: block">
+              <li><a  class="">Sales Settlement</a></li>
+              <li><a  class="active">Settlement Completed</a></li>
             </ul>
           </li>
         </ul>
@@ -28,7 +26,7 @@
       <div class="content">
         <div class="content-tit">
           <h2 class="tit">GLVS</h2>
-          <h2 class="tit">Manage Phone Number</h2>
+          <h2 class="tit">Settlement Completed</h2>
           <ul class="navigation">
             <li>HOME</li>
             <li>GLVS</li>
@@ -38,64 +36,24 @@
           <div class="search-area">
             <ul class="search-list">
               <li class="fix">
-                <strong>Phone number:</strong>
-                <span class="input-style">
-                                        <input type="text" placeholder="" />
-                                    </span>
+
               </li>
               <li class="fix">
-                <strong>Category:</strong>
+                <strong>Owner:</strong>
                 <span class="input-style">
                                         <select>
-                                          <option>ALL</option>
-                                          <option>0.1.2.3 SERIES</option>
-                                          <option>0.1.9 SERIES</option>
-                                          <option>1314 SERIES</option>
-                                          <option>520 SERIES</option>
-                                          <option>AAA SERIES</option>
-                                          <option>AAAA SERIES</option>
-                                          <option>AAAAA SERIES</option>
-                                          <option>AAAAAA SERIES</option>
-                                          <option>AAAB SERIES</option>
-                                          <option>AABA SERIES</option>
-                                          <option>AABAA SERIES</option>
-                                          <option>AABB SERIES</option>
-                                          <option>AABBCC SERIES</option>
-                                          <option>AABBCCDD SERIES</option>
-                                          <option>AB SERIES</option>
-                                          <option>ABAA SERIES</option>
-                                          <option>ABAA/AABA SERIES</option>
-                                          <option>ABAB SERIES</option>
-                                          <option>ABABAB SERIES</option>
-                                          <option>ABBA SERIES</option>
-                                          <option>ABBB SERIES</option>
-                                          <option>BOSS SERIES</option>
-                                          <option>FENGSHUI 1349 SERIES</option>
-                                          <option>FENGSHUI 2678 SERIES</option>
-                                          <option>ICHING SERIES</option>
-                                          <option>LADDER SERIES</option>
-                                          <option>MATAFIZIK SERIES</option>
-                                          <option>NORMAL SERIES</option>
-                                          <option>ONG 88 SERIES</option>
-                                          <option>OTHER SERIES</option>
-                                          <option>REPEAT SERIES</option>
-                                          <option>THOUSAND NUMBER SERIES</option>
-                                          <option>YEAR SERIES</option>
+                                          <option>A</option>
+                                          <option>B</option>
+                                          <option>C</option>
+                                          <option>D</option>
+                                          <option>E</option>
+                                          <option>F</option>
+                                          <option>G</option>
+                                          <option>H</option>
                                         </select>
                                     </span>
               </li>
-              <li class="fix">
-                <strong>Price Range(Min):</strong>
-                <span class="input-style">
-                                        <input type="text" placeholder="" />
-                                    </span>
-              </li>
-              <li class="fix">
-                <strong>Price Range(Max):</strong>
-                <span class="input-style">
-                                        <input type="text" placeholder="" />
-                                    </span>
-              </li>
+
             </ul>
 
             <div class="search-btn">
@@ -104,13 +62,7 @@
             </div>
 
 
-
-            <div class="search-btn">
-              <button type="button" class="type3">Upload Phone Number</button>
-            </div>
-
           </div>
-
           <!-- //search-area -->
 
           <table class="table-style t-center list">
@@ -134,29 +86,34 @@
                 <th colspan="3">EIGW</th>
             </tr> -->
             <tr>
+              <th>NO</th>
               <th>PREFIX NUMBER</th>
               <th>CATEGORY</th>
               <th>PHONE NUMBER</th>
               <th>PRICE (MYR/RM)</th>
               <th>PRICE (KRW/WON)</th>
               <th>STATUS</th>
-              <th>UPLOAD DATE</th>
+              <th>OWNER COST (MYR/RM)</th>
+              <th>OWNER COST (KRW/WON)</th>
+              <th>TRANSACTION DATE</th>
               <th>OWNER</th>
-              <th>CONTACT NUMBER</th>
-              <th>OPERATION</th>
+              <th>BANK ACCOUNT</th>
             </tr>
             </thead>
             <tbody>
             <tr v-for="salePhnNum in salePhnNums" :key="salePhnNum.sale_id">
+              <td>{{ salePhnNum.sale_id }}</td>
               <td>{{ salePhnNum.sale_phn_pfx_nm }}</td>
               <td>{{ salePhnNum.sale_ctgr_nm }}</td>
               <td>{{ salePhnNum.sale_phn_num }}</td>
               <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
               <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
-              <td>{{ salePhnNum.sale_status_nm }}</td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
-              <td>{{ salePhnNum.sale_contact }}</td>
+              <td></td>
             </tr>
             </tbody>
           </table>
@@ -177,6 +134,9 @@
             <a href="#none">10</a>
             <a href="#none" class="next"></a>
             <a href="#none" class="last"></a>
+          </div>
+          <div class="btn-area">
+            <a href="#none" class="">Settlement Rate: %</a>
           </div>
         </div>
       </div>
@@ -199,7 +159,6 @@ export default {
   components: {
     PageHeader
   },
-
   created() {
     this.fetchSalePhnNums();
   },
