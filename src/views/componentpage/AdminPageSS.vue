@@ -1,6 +1,7 @@
 
 <template>
   <PageHeader/>
+
   <div class="wrap">
     <!-- container : S -->
     <div class="container">
@@ -8,16 +9,13 @@
         <h2 class="lnb-tit">MENU</h2>
         <ul class="lnb-menu">
           <li class="sub">
-            <a  class="">GLVS</a>
-          </li>
-          <li class="sub">
-            <a href="#none">AGENT</a>
+            <router-link to="/seller">SELLER</router-link>
           </li>
           <li class="sub on">
             <a  class="active">ADMIN</a>
             <ul class="lnb-menu-sub" style="display: block">
-              <li><a  class="active">Sales Settlement</a></li>
-              <li><a  class="">Settlement Completed</a></li>
+              <li><a  class="active">Sales Commision Settlement</a></li>
+              <li><router-link to="/admin/scsc">Sales Settlement Commision Completed</router-link></li>
             </ul>
           </li>
         </ul>
@@ -26,13 +24,13 @@
       <div class="content">
         <div class="content-tit">
           <h2 class="tit">GLVS</h2>
-          <h2 class="tit">Sales Settlement</h2>
+          <h2 class="tit">Sales Commision Settlement</h2>
           <ul class="navigation">
             <li>HOME</li>
             <li>GLVS</li>
           </ul>
         </div>
-        <div class="template">
+        <div class="template min">
           <div class="search-area">
             <ul class="search-list">
               <li class="fix">
@@ -53,11 +51,23 @@
                                         </select>
                                     </span>
               </li>
+              <li class="fix">
+                <strong>Date:</strong>
+                  <span class="input-style">
+                    <input type="text" placeholder="2024-01-01" class="datepicker" />
+                  </span>
+                <em>~</em>
+                  <span class="input-style">
+                    <input type="text" placeholder="2024-12-31" class="datepicker" />
+                  </span>
+                </li>
 
             </ul>
 
             <div class="search-btn">
               <button type="button">Search</button>
+            </div>
+            <div class="search-btn">
               <button type="button" class="type2">Reset</button>
             </div>
 
@@ -136,6 +146,7 @@
             <a href="#none" class="last"></a>
           </div>
           <div class="btn-area">
+            <a href="#none" class="">Total Own: </a>
             <a href="#none" class="">Settlement Rate: %</a>
             <a href="#none" class="next">Settlement Completed</a>
           </div>
@@ -143,10 +154,12 @@
       </div>
     </div>
   </div>
+  <PageFooter/>
 </template>
 
 <script>
 import PageHeader from '@/components/PageHeader';
+import PageFooter from '@/components/PageFooter';
 import axios from 'axios';
 
 export default {
@@ -158,7 +171,8 @@ export default {
   },
 
   components: {
-    PageHeader
+    PageHeader,
+    PageFooter
   },
 
   created() {
@@ -176,6 +190,7 @@ export default {
     }
   }
 };
+
 </script>
 
 <style scoped>

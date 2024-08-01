@@ -5,7 +5,9 @@
       <header class="header">
         <div class="inner">
           <h1 class="logo">
+            <router-link to="/home">
             <img src="../images/glvs_logo.png" alt="로고" />
+            </router-link>
           </h1>
           <nav class="gnb-area">
             <ul class="gnb-menu">
@@ -14,7 +16,7 @@
                 <ul class="sub_menu">
                   <li>Personal Data</li>
                   <li>Change Password</li>
-                  <li>Logout</li>
+                  <li><router-link to="/home">Logout</router-link></li>
                 </ul>
               </li>
             </ul>

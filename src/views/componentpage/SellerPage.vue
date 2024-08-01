@@ -1,6 +1,6 @@
 
 <template>
-  <PageHeader2/>
+  <PageHeader/>
   <div class="wrap">
     <!-- container : S -->
     <div class="container">
@@ -8,21 +8,14 @@
         <h2 class="lnb-tit">MENU</h2>
         <ul class="lnb-menu">
           <li class="sub on">
-            <a  class="active">GLVS</a>
+            <router-link to="/seller" class="active">SELLER</router-link>
             <ul class="lnb-menu-sub" style="display: block">
-              <li><a  class="active">Seach Phone Number</a></li>
+              <li><a  class="active">Manage Phone Number</a></li>
             </ul>
           </li>
           <li class="sub">
-            <a href="#none">AGENT</a>
+            <a href="/admin/scs">ADMIN</a>
             <ul class="lnb-menu-sub">
-              <li><a href="#none">UPLOAD</a></li>
-            </ul>
-          </li>
-          <li class="sub">
-            <a href="#none">ADMIN</a>
-            <ul class="lnb-menu-sub">
-              <li><a href="#none">OwnerSoldCostList</a></li>
             </ul>
           </li>
         </ul>
@@ -31,13 +24,13 @@
       <div class="content">
         <div class="content-tit">
           <h2 class="tit">GLVS</h2>
-          <h2 class="tit">Search Phone Number</h2>
+          <h2 class="tit">Manage Phone Number</h2>
           <ul class="navigation">
             <li>HOME</li>
             <li>GLVS</li>
           </ul>
         </div>
-        <div class="template">
+        <div class="template min">
           <div class="search-area">
             <ul class="search-list">
               <li class="fix">
@@ -107,11 +100,17 @@
             </div>
 
 
+
+            <div class="search-btn">
+              <button type="button" class="type3">Upload Phone Number</button>
+            </div>
+
           </div>
+
           <!-- //search-area -->
 
           <table class="table-style t-center list">
-<!--             <colgroup>
+            <!-- <colgroup>
                     <col style="width:100px;">
                     <col style="width:100px;">
                     <col style="width:100px;">
@@ -121,13 +120,15 @@
                     <col style="width:100px;">
                     <col style="width:100px;">
                     <col style="width:100px;">
-                </colgroup>-->
+                    <col style="width:100px;">
+                    <col style="width:100px;">
+                </colgroup> -->
             <thead>
-<!--             <tr>
+            <!-- <tr>
                 <th rowspan="2">구분</th>
                 <th colspan="7">EAI</th>
                 <th colspan="3">EIGW</th>
-            </tr>-->
+            </tr> -->
             <tr>
               <th>PREFIX NUMBER</th>
               <th>CATEGORY</th>
@@ -138,6 +139,7 @@
               <th>UPLOAD DATE</th>
               <th>OWNER</th>
               <th>CONTACT NUMBER</th>
+              <th>OPERATION</th>
             </tr>
             </thead>
             <tbody>
@@ -151,39 +153,38 @@
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
               <td>{{ salePhnNum.sale_contact }}</td>
+              <td></td>
             </tr>
             </tbody>
           </table>
           <!-- //table-style -->
 
-           <div class="pageing">
-              <a href="#none" class="first"></a>
-              <a href="#none" class="pre"></a>
-              <a href="#none" class="selected">1</a>
-              <a href="#none">2</a>
-              <a href="#none">3</a>
-              <a href="#none">4</a>
-              <a href="#none">5</a>
-              <a href="#none">6</a>
-              <a href="#none">7</a>
-              <a href="#none">8</a>
-              <a href="#none">9</a>
-              <a href="#none">10</a>
-              <a href="#none" class="next"></a>
-              <a href="#none" class="last"></a>
-          </div>
-          <div class="btn-area">
-            <a href="#none" class="">Sales Status </a>
-            <a href="#none" class="next">Agent Login</a>
+          <div class="pageing">
+            <a href="#none" class="first"></a>
+            <a href="#none" class="pre"></a>
+            <a href="#none" class="selected">1</a>
+            <a href="#none">2</a>
+            <a href="#none">3</a>
+            <a href="#none">4</a>
+            <a href="#none">5</a>
+            <a href="#none">6</a>
+            <a href="#none">7</a>
+            <a href="#none">8</a>
+            <a href="#none">9</a>
+            <a href="#none">10</a>
+            <a href="#none" class="next"></a>
+            <a href="#none" class="last"></a>
           </div>
         </div>
       </div>
     </div>
   </div>
+    <PageFooter/>
 </template>
 
 <script>
-import PageHeader2 from '@/components/PageHeader2';
+import PageHeader from '@/components/PageHeader';
+import PageFooter from '@/components/PageFooter';
 import axios from 'axios';
 
 export default {
@@ -195,7 +196,8 @@ export default {
   },
 
   components: {
-    PageHeader2
+    PageHeader,
+    PageFooter
   },
 
   created() {

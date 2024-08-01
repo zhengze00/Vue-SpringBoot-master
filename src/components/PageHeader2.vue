@@ -5,7 +5,9 @@
     <header class="header">
       <div class="inner">
         <h1 class="logo">
-          <img src="../images/glvs_logo.png" alt="로고" />
+          <router-link to="/home">
+            <img src="../images/glvs_logo.png" alt="로고" />
+          </router-link>
         </h1>
 <!--        <nav class="gnb-area">
           <ul class="gnb-menu">
