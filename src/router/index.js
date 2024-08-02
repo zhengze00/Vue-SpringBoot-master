@@ -4,8 +4,8 @@ import BoardList from '@/views/board/BoardList.vue'
 import HomePage from "@/views/componentpage/HomePage.vue";
 import AccountLoginPage from "@/views/componentpage/AccountLoginPage.vue";
 import SellerPage from "@/views/componentpage/SellerPage.vue";
-import AdminPageSS from "@/views/componentpage/AdminPageSS.vue";
-import AdminPageSC from "@/views/componentpage/AdminPageSC.vue";
+import AdminPageSCSC from "@/views/componentpage/AdminPageSCS.vue";
+import AdminPageSCS from "@/views/componentpage/AdminPageSCSC.vue";
 
 
 const routes = [
@@ -45,12 +45,12 @@ const routes = [
     {
         path: '/admin/scs',
         name: 'AdminPageSS',
-        component: AdminPageSS
+        component: AdminPageSCSC
     },
     {
         path: '/admin/scsc',
         name: 'AdminPageSC',
-        component: AdminPageSC
+        component: AdminPageSCS
     }
 ]
 

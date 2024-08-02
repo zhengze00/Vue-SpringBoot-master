@@ -1,25 +1,28 @@
 ﻿@charset "utf-8";
 
 .wrap {
-    min-width: 1540px;
+    min-width: 1608px;
 }
-
+/* Modal Background */
 .modal {
-    display: none;
+    display: none; /* 默认隐藏 */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3); /* 深色背景，确保不透明 */
     justify-content: center;
     align-items: center;
+    z-index: 1000; /* 确保在页面顶部 */
 }
 
+/* Modal Show Class */
 .modal.show {
-    display: flex;
+    display: flex; /* 显示弹窗 */
 }
 
+/* Modal Content */
 .modal-content {
     position: relative;
     background-color: #fff;
@@ -29,6 +32,7 @@
     text-align: left;
 }
 
+/* Modal Header */
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -43,11 +47,13 @@
     font-weight: bold;
 }
 
+/* Close Button */
 .close-btn {
     cursor: pointer;
     font-size: 24px;
 }
 
+/* Modal Body */
 .modal-body {
     display: flex;
     justify-content: space-between;
@@ -64,13 +70,81 @@
     font-weight: bold;
 }
 
-.modal-section p{
-    font-size: 13px;
-    text-align: center;
-    border: 1px solid #ccc;
-    padding: 10px;
+.modal-section label {
+    display: block;
     margin: 5px 0;
+    font-weight: bold;
+}
+
+.modal-section input {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 8px;
     border-radius: 5px;
+    margin: 4px 0;
+    margin-bottom: 2px;
+    font-size: 14px; /* 合适的字体大小 */
+    color: #333; /* 字体颜色，确保可读性 */
+    font-weight: normal; /* 去掉粗体 */
+    width: 100%;
+}
+
+.modal-section p {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 8px;
+    border-radius: 5px;
+    margin: 4px 0;
+    margin-bottom: 2px;
+    font-size: 14px; /* 合适的字体大小 */
+    color: #333; /* 字体颜色，确保可读性 */
+    font-weight: normal; /* 去掉粗体 */
+    width: 100%;
+}
+
+/* Modal Footer */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+/* Modal Custom Styles */
+.modal-custom {
+    display: flex;
+    flex-direction: row; /* Ensure layout is in row direction */
+}
+
+.modal-custom .modal-column {
+    flex: 1;
+    margin-right: 20px; /* Space between columns */
+}
+
+.modal-custom .modal-row {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+}
+
+/* Ensure all inputs and selects take full width within their column */
+.modal-custom .modal-column input,
+.modal-custom .modal-column select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Adjust spacing and margins */
+.modal-custom label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* New Style: Make the right column take the full width */
+.modal-custom .modal-column-right {
+    flex: 2; /* Make this column wider */
 }
 
 /* Header */
@@ -88,7 +162,7 @@
     position: relative;
 }
 .logo {
-    width: 220px;
+    width: 120px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -103,7 +177,7 @@
 .gnb-menu > li {
     position: relative;
     float: left;
-    padding: 0 50px;
+    padding: 0 0px;
     cursor: pointer;
 }
 
@@ -130,7 +204,8 @@
     color: #285add;
 }
 .gnb-menu > li:hover span::after {
-    transform: scale(1);
+/*    transform: scale(1);*/ /*蓝色下划线*/
+    transform: scale(0);
 }
 
 .gnb-menu > li:hover .sub_menu {
@@ -171,7 +246,11 @@
     font-size: 13px;
     color: #777;
 }
-.sub_menu li:hover {
+.sub_menu li a {
+    color: inherit; /* 确保继承父元素的颜色 */
+}
+
+.sub_menu li a:hover {
     color: #fff;
     background: #285add;
 }
@@ -242,7 +321,8 @@
     background: #285add url("../images/allmenu_icon.png") no-repeat 50%;
     text-indent: -9999px;
     vertical-align: middle;
-    margin-left: 20px;
+    position: relative;
+    margin-right: 20px;
 }
 .allmenu-btn.close {
     background: #285add url("../images/allmenu-close-line.png") no-repeat 50%;
@@ -494,6 +574,19 @@
     background: none;
     font-weight: 900;
     color: #444;
+}
+.content-tit1 {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 改为center，使内容水平居中 */
+    width: 200%; /* 设置宽度以使其占据整个页面宽度 */
+}
+
+.content-tit1 .tit1 {
+    font-size: 22px;
+    font-weight: 900;
+    color: #383a63;
+    position: relative;
 }
 
 /* SEARCH */
@@ -933,39 +1026,24 @@ textarea:focus,
 
 /* 테이블 스타일 */
 .table-style {
-    table-layout: fixed;
-    width: 100%;
+    width: 100%; /* 表格宽度为100% */
+    table-layout: fixed; /* 固定表格布局 */
     border-top: 2px solid #43496b;
-    /* border-right: 1px solid #d7d7d7; */
     word-break: break-all;
-    border-collapse: inherit;
+    border-collapse: collapse;
 }
-.table-style th {
-    height: 36px;
-    font-size: 12px;
-    color: #444;
-    font-weight: 800;
-    padding: 5px;
-    background: #f9fbfd;
-    /* border-left: 1px solid #d7d7d7; */
-    border-bottom: 1px solid #d7d7d7;
-    text-align: center;
+.table-container {
+    max-width: 100%; /* 限制最大宽度为页面宽度 */
+    overflow-x: auto; /* 当内容超过最大宽度时，添加水平滚动条 */
 }
-.table-style tbody th {
-    text-align: left;
-    padding: 0 10px;
-    font-weight: 700;
+.table-style {
+    width: 100%; /* 表格宽度为100% */
+    table-layout: fixed; /* 固定表格布局 */
+    border-top: 2px solid #43496b;
+    word-break: break-all;
+    border-collapse: collapse;
 }
-.table-style td {
-    height: 36px;
-    font-size: 13px;
-    color: #444;
-    padding: 5px 8px;
-    /* border-left: 1px solid #d7d7d7; */
-    border-bottom: 1px solid #d7d7d7;
-    /*background: #fff;*/
-    line-height: 22px;
-}
+
 .table-style td.num {
     color: #999;
 }
@@ -2986,6 +3064,9 @@ input.datepicker {
 .btn-area.type2 {
     margin-top: 0;
 }
+.btn-area .search-btn {
+    margin-top: -30px; /* 调整这个值来向上移动按钮 */
+}
 .btn-area a {
     display: inline-block;
     width: 158px;
@@ -2994,7 +3075,7 @@ input.datepicker {
     border-radius: 6px;
     box-sizing: border-box;
     color: #666;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 48px;
     transition: all 0.3s;
 }

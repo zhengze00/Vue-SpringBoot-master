@@ -20,10 +20,11 @@
       <div class="content">
         <div class="content-tit">
           <h2 class="tit">GLVS</h2>
-          <h2 class="tit">Search Phone Number</h2>
+          <h2 class="tit">Seach Phone Number</h2>
           <ul class="navigation">
             <li>HOME</li>
             <li>GLVS</li>
+            <li>Seach Phone Number</li>
           </ul>
         </div>
         <div class="template min">
@@ -98,27 +99,12 @@
             </div>
           </div>
 
-          </div>
+          </div >
           <!-- //search-area -->
-
+        <div class="table-container">
           <table class="table-style t-center list">
-<!--             <colgroup>
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                </colgroup>-->
+
             <thead>
-<!--             <tr>
-                <th rowspan="2">구분</th>
-                <th colspan="7">EAI</th>
-                <th colspan="3">EIGW</th>
-            </tr>-->
             <tr>
               <th>PREFIX NUMBER</th>
               <th>CATEGORY</th>
@@ -128,7 +114,7 @@
               <th>STATUS</th>
               <th>UPLOAD DATE</th>
               <th>OWNER</th>
-              <th>CONTACT NUMBER</th>
+              <th>↓CONTACT NUMBER↓(WhatsApp)</th>
             </tr>
             </thead>
 
@@ -147,29 +133,30 @@
             </tbody>
 
           </table>
+        </div>
           <!-- //table-style -->
 
            <div class="pageing">
-              <a href="#none" class="first"></a>
-              <a href="#none" class="pre"></a>
-              <a href="#none" class="selected">1</a>
-              <a href="#none">2</a>
-              <a href="#none">3</a>
-              <a href="#none">4</a>
-              <a href="#none">5</a>
-              <a href="#none">6</a>
-              <a href="#none">7</a>
-              <a href="#none">8</a>
-              <a href="#none">9</a>
-              <a href="#none">10</a>
-              <a href="#none" class="next"></a>
-              <a href="#none" class="last"></a>
+              <a class="first"></a>
+              <a class="pre"></a>
+              <a class="selected">1</a>
+              <a>2</a>
+              <a>3</a>
+              <a>4</a>
+              <a>5</a>
+              <a>6</a>
+              <a>7</a>
+              <a>8</a>
+              <a>9</a>
+              <a>10</a>
+              <a class="next"></a>
+              <a class="last"></a>
           </div>
 
 <!--   Sales Status POPUP      s-->
           <div id="app">
             <div class="btn-area">
-              <a href="#none" @click="showModal = true">Sales Status</a>
+              <a @click="showModal = true">Sales Status</a>
               <router-link to="/account/login" class="next">Agent Login</router-link>
             </div>
 

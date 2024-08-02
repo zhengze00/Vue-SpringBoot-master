@@ -1,4 +1,3 @@
-
 <template>
   <PageHeader/>
   <div class="wrap">
@@ -27,7 +26,8 @@
           <h2 class="tit">Manage Phone Number</h2>
           <ul class="navigation">
             <li>HOME</li>
-            <li>GLVS</li>
+            <li>SELLER</li>
+            <li>Manage Phone Number</li>
           </ul>
         </div>
         <div class="template min">
@@ -36,13 +36,13 @@
               <li class="fix">
                 <strong>Phone number:</strong>
                 <span class="input-style">
-                                        <input type="text" placeholder="" />
-                                    </span>
+                  <input type="text" v-model="phoneNumber" placeholder="" />
+                </span>
               </li>
               <li class="fix">
                 <strong>Category:</strong>
                 <span class="input-style">
-                                        <select>
+                                        <select v-model="category">
                                           <option>ALL</option>
                                           <option>0.1.2.3 SERIES</option>
                                           <option>0.1.9 SERIES</option>
@@ -83,104 +83,140 @@
               <li class="fix">
                 <strong>Price Range(Min):</strong>
                 <span class="input-style">
-                                        <input type="text" placeholder="" />
+                                      <input type="text" v-model="priceMin" placeholder="" />
                                     </span>
               </li>
               <li class="fix">
                 <strong>Price Range(Max):</strong>
                 <span class="input-style">
-                                        <input type="text" placeholder="" />
+                                          <input type="text" v-model="priceMax" placeholder="" />
                                     </span>
               </li>
             </ul>
 
             <div class="search-btn">
-              <button type="button">Search</button>
-              <button type="button" class="type2">Reset</button>
+              <button type="button" @click="search">Search</button>
+              <button type="button" class="type2" @click="reset">Reset</button>
             </div>
 
 
 
-            <div class="search-btn">
-              <button type="button" class="type3">Upload Phone Number</button>
+            <div id="app">
+              <div class="btn-area">
+                <div class="search-btn">
+                  <button type="button" class="type3" @click="showModal = true">Upload Phone Number</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal" :class="{ show: showModal }" @click.self="showModal = false">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2>Upload Phone Number</h2>
+                  <span class="close-btn" @click="showModal = false">&times;</span>
+                </div>
+                <div class="modal-body">
+                  <div class="modal-section">
+                    <p>Prefix Number:</p>
+                    <p>Category:</p>
+                    <p>Phone Number:</p>
+                    <p>Price(MYR/RM):</p>
+                    <p>Status:</p>
+                    <p>Upload Date:</p>
+                  </div>
+                  <div class="modal-section">
+                    <input>
+                    <input>
+                    <input>
+                    <input>
+                    <input>
+                    <input>
+                  </div>
+                </div>
+              </div>
             </div>
 
           </div>
 
-          <!-- //search-area -->
 
-          <table class="table-style t-center list">
-            <!-- <colgroup>
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                </colgroup> -->
-            <thead>
-            <!-- <tr>
-                <th rowspan="2">구분</th>
-                <th colspan="7">EAI</th>
-                <th colspan="3">EIGW</th>
-            </tr> -->
-            <tr>
-              <th>PREFIX NUMBER</th>
-              <th>CATEGORY</th>
-              <th>PHONE NUMBER</th>
-              <th>PRICE (MYR/RM)</th>
-              <th>PRICE (KRW/WON)</th>
-              <th>STATUS</th>
-              <th>UPLOAD DATE</th>
-              <th>OWNER</th>
-              <th>CONTACT NUMBER</th>
-              <th>OPERATION</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="salePhnNum in salePhnNums" :key="salePhnNum.sale_id">
-              <td>{{ salePhnNum.sale_phn_pfx_nm }}</td>
-              <td>{{ salePhnNum.sale_ctgr_nm }}</td>
-              <td>{{ salePhnNum.sale_phn_num }}</td>
-              <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
-              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
-              <td>{{ salePhnNum.sale_status_nm }}</td>
-              <td>{{ salePhnNum.rgst_dt }}</td>
-              <td>{{ salePhnNum.rgst_nm }}</td>
-              <td>{{ salePhnNum.sale_contact }}</td>
-              <td></td>
-            </tr>
-            </tbody>
-          </table>
-          <!-- //table-style -->
 
-          <div class="pageing">
-            <a href="#none" class="first"></a>
-            <a href="#none" class="pre"></a>
-            <a href="#none" class="selected">1</a>
-            <a href="#none">2</a>
-            <a href="#none">3</a>
-            <a href="#none">4</a>
-            <a href="#none">5</a>
-            <a href="#none">6</a>
-            <a href="#none">7</a>
-            <a href="#none">8</a>
-            <a href="#none">9</a>
-            <a href="#none">10</a>
-            <a href="#none" class="next"></a>
-            <a href="#none" class="last"></a>
-          </div>
         </div>
+        <!-- //search-area -->
+
+        <table class="table-style t-center list">
+          <!--             <colgroup>
+                              <col style="width:100px;">
+                              <col style="width:100px;">
+                              <col style="width:100px;">
+                              <col style="width:100px;">
+                              <col style="width:100px;">
+                              <col style="width:100px;">
+                              <col style="width:100px;">
+                              <col style="width:100px;">
+                              <col style="width:100px;">
+                          </colgroup>-->
+          <thead>
+          <!--             <tr>
+                          <th rowspan="2">구분</th>
+                          <th colspan="7">EAI</th>
+                          <th colspan="3">EIGW</th>
+                      </tr>-->
+          <tr>
+            <th>PREFIX NUMBER</th>
+            <th>CATEGORY</th>
+            <th>PHONE NUMBER</th>
+            <th>PRICE (MYR/RM)</th>
+            <th>PRICE (KRW/WON)</th>
+            <th>STATUS</th>
+            <th>UPLOAD DATE</th>
+            <th>OWNER</th>
+            <th>CONTACT NUMBER</th>
+            <th>OPERATION</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr v-for="salePhnNum in filteredPhnNums" :key="salePhnNum.sale_id">
+            <td>{{ salePhnNum.sale_phn_pfx_nm }}</td>
+            <td>{{ salePhnNum.sale_ctgr_nm }}</td>
+            <td>{{ salePhnNum.sale_phn_num }}</td>
+            <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
+            <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
+            <td>{{ salePhnNum.sale_status_nm }}</td>
+            <td>{{ salePhnNum.rgst_dt }}</td>
+            <td>{{ salePhnNum.rgst_nm }}</td>
+            <td>{{ salePhnNum.sale_contact }}</td>
+            <td></td>
+          </tr>
+          </tbody>
+
+        </table>
+        <!-- //table-style -->
+
+        <div class="pageing">
+          <a class="first"></a>
+          <a class="pre"></a>
+          <a class="selected">1</a>
+          <a>2</a>
+          <a>3</a>
+          <a>4</a>
+          <a>5</a>
+          <a>6</a>
+          <a>7</a>
+          <a>8</a>
+          <a>9</a>
+          <a>10</a>
+          <a class="next"></a>
+          <a class="last"></a>
+        </div>
+
       </div>
     </div>
   </div>
-    <PageFooter/>
+  <PageFooter/>
 </template>
+
+
 
 <script>
 import PageHeader from '@/components/PageHeader';
@@ -190,8 +226,14 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      exchangeRate: 1,
+      showModal: false,
+      phoneNumber: '',
+      category: '',
+      priceMin: '',
+      priceMax: '',
       salePhnNums: [],
-      exchangeRate: 1
+      filteredPhnNums: []
     };
   },
 
@@ -203,19 +245,55 @@ export default {
   created() {
     this.fetchSalePhnNums();
   },
+
   methods: {
     async fetchSalePhnNums() {
       try {
         const response = await axios.get('http://localhost:8081/getSalePhnNum');
         this.salePhnNums = response.data.salePhnNums;
         this.exchangeRate = parseFloat(response.data.exchangeRate); // 获取汇率
+        this.filteredPhnNums = this.salePhnNums; // 初始化过滤后的数据
       } catch (error) {
         console.error('Error fetching components:', error);
       }
+    },
+    search() {
+      this.filteredPhnNums = this.salePhnNums.filter(phnNum => {
+        const matchesPhoneNumber = !this.phoneNumber || phnNum.sale_phn_num.includes(this.phoneNumber);
+        const matchesCategory = !this.category || phnNum.sale_ctgr_nm === this.category;
+        const priceMinNum = parseFloat(this.priceMin);
+        const priceMaxNum = parseFloat(this.priceMax);
+        const salePriceNum = parseFloat(phnNum.sale_price);
+
+        const matchesPriceMin = isNaN(priceMinNum) || salePriceNum >= priceMinNum;
+        const matchesPriceMax = isNaN(priceMaxNum) || salePriceNum <= priceMaxNum;
+
+        // 返回所有条件都匹配的结果
+        return matchesPhoneNumber && matchesCategory && matchesPriceMin && matchesPriceMax;
+      });
+
+
+    },
+    reset() {
+      this.phoneNumber = '';
+      this.category = '';
+      this.priceMin = '';
+      this.priceMax = '';
+      this.filteredPhnNums = this.salePhnNums;
     }
+  },
+
+  watch: {
+    phoneNumber: 'search',
+    category: 'search',
+    priceMin: 'search',
+    priceMax: 'search'
   }
+
+
 };
 </script>
+
 
 <style scoped>
 @import "@/assets/common_new.css";

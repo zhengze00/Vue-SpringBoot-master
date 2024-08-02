@@ -1,4 +1,3 @@
-
 <template>
   <PageHeader/>
 
@@ -12,14 +11,13 @@
             <a href="#none">SELLER</a>
           </li>
           <li class="sub on">
-            <a  class="active">ADMIN</a>
+            <a class="active">ADMIN</a>
             <ul class="lnb-menu-sub" style="display: block">
               <li><router-link to="/admin/scs">Sales Commision Settlement</router-link></li>
-              <li><a  class="active">Settlement Commision Completed</a></li>
+              <li><a class="active">Settlement Commision Completed</a></li>
             </ul>
           </li>
         </ul>
-
       </aside>
       <div class="content">
         <div class="content-tit">
@@ -27,74 +25,52 @@
           <h2 class="tit">Sales Commision Settlement Completed</h2>
           <ul class="navigation">
             <li>HOME</li>
-            <li>GLVS</li>
+            <li>ADMIN</li>
+            <li>Sales Commision Settlement Completed</li>
           </ul>
         </div>
         <div class="template min">
           <div class="search-area">
             <ul class="search-list">
               <li class="fix">
-
-              </li>
-              <li class="fix">
                 <strong>Owner:</strong>
                 <span class="input-style">
-                                        <select>
-                                          <option>A</option>
-                                          <option>B</option>
-                                          <option>C</option>
-                                          <option>D</option>
-                                          <option>E</option>
-                                          <option>F</option>
-                                          <option>G</option>
-                                          <option>H</option>
-                                        </select>
-                                    </span>
+                  <select v-model="selectedOwner" @change="fetchSalePhnNums">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                    <option value="H">H</option>
+                    <option value="">ALL</option>
+                  </select>
+                </span>
               </li>
               <li class="fix">
                 <strong>Date:</strong>
                 <span class="input-style">
-                    <input type="text" placeholder="2024-01-01" class="datepicker" />
-                  </span>
+                  <input v-model="startDate" type="text" placeholder="2024-01-01" class="datepicker" @change="fetchSalePhnNums" />
+                </span>
                 <em>~</em>
                 <span class="input-style">
-                    <input type="text" placeholder="2024-12-31" class="datepicker" />
-                  </span>
+                  <input v-model="endDate" type="text" placeholder="2024-12-31" class="datepicker" @change="fetchSalePhnNums" />
+                </span>
               </li>
-
             </ul>
 
             <div class="search-btn">
-              <button type="button">Search</button>
+              <button type="button" @click="fetchSalePhnNums">Search</button>
             </div>
             <div class="search-btn">
-              <button type="button" class="type2">Reset</button>
+              <button type="button" class="type2" @click="resetFilters">Reset</button>
             </div>
-
-
           </div>
           <!-- //search-area -->
 
           <table class="table-style t-center list">
-            <!-- <colgroup>
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                    <col style="width:100px;">
-                </colgroup> -->
             <thead>
-            <!-- <tr>
-                <th rowspan="2">구분</th>
-                <th colspan="7">EAI</th>
-                <th colspan="3">EIGW</th>
-            </tr> -->
             <tr>
               <th>NO</th>
               <th>PREFIX NUMBER</th>
@@ -111,7 +87,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="salePhnNum in salePhnNums" :key="salePhnNum.sale_id">
+            <tr v-for="salePhnNum in filteredSalePhnNums" :key="salePhnNum.sale_id">
               <td>{{ salePhnNum.sale_id }}</td>
               <td>{{ salePhnNum.sale_phn_pfx_nm }}</td>
               <td>{{ salePhnNum.sale_ctgr_nm }}</td>
@@ -146,8 +122,8 @@
             <a href="#none" class="last"></a>
           </div>
           <div class="btn-area">
-            <a href="#none" class="">Total Own: </a>
-            <a href="#none" class="">Settlement Rate: %</a>
+            <a class="">Total Own: </a>
+            <a class="">Settlement Rate: %</a>
           </div>
         </div>
       </div>
@@ -155,7 +131,6 @@
   </div>
   <PageFooter/>
 </template>
-
 <script>
 import PageHeader from '@/components/PageHeader';
 import PageFooter from '@/components/PageFooter';
@@ -165,7 +140,10 @@ export default {
   data() {
     return {
       salePhnNums: [],
-      exchangeRate: 1
+      exchangeRate: 1,
+      selectedOwner: 'A', // 默认选择“A”
+      startDate: '', // 绑定到开始日期输入框
+      endDate: '' // 绑定到结束日期输入框
     };
   },
 
@@ -175,24 +153,51 @@ export default {
   },
 
   created() {
-    this.fetchSalePhnNums();
+    this.fetchSalePhnNums(); // 初始化时获取数据
   },
+
+  computed: {
+    filteredSalePhnNums() {
+      return this.salePhnNums.filter(salePhnNum => {
+        // 过滤所有者
+        const matchesOwner = this.selectedOwner === '' || salePhnNum.rgst_nm === this.selectedOwner;
+
+        // 过滤日期范围
+        const saleDate = new Date(salePhnNum.rgst_dt);
+        const startDate = this.startDate ? new Date(this.startDate) : new Date(-8640000000000000); // -Infinity
+        const endDate = this.endDate ? new Date(this.endDate) : new Date(8640000000000000); // +Infinity
+
+        const matchesDateRange = saleDate >= startDate && saleDate <= endDate;
+
+        return matchesOwner && matchesDateRange;
+      });
+    }
+  },
+
   methods: {
     async fetchSalePhnNums() {
       try {
-        const response = await axios.get('http://localhost:8081/getSalePhnNum');
+        const response = await axios.get('http://localhost:8081/getSalePhnNum', {
+          params: {
+            owner: this.selectedOwner, // 传递当前选择的所有者
+            startDate: this.startDate,
+            endDate: this.endDate
+          }
+        });
         this.salePhnNums = response.data.salePhnNums;
-        this.exchangeRate = parseFloat(response.data.exchangeRate); // 获取汇率
+        this.exchangeRate = parseFloat(response.data.exchangeRate); // 更新汇率
       } catch (error) {
-        console.error('Error fetching components:', error);
+        console.error('Error fetching sale phone numbers:', error);
       }
+    },
+
+    resetFilters() {
+      this.selectedOwner = 'A'; // 重置为默认选择“A”
+      this.startDate = '';
+      this.endDate = '';
+      // 重置后重新获取数据
+      this.fetchSalePhnNums();
     }
   }
 };
 </script>
-
-<style scoped>
-@import "@/assets/common_new.css";
-@import "@/assets/reset.css";
-</style>
-

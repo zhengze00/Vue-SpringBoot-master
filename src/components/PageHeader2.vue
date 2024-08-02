@@ -9,6 +9,9 @@
             <img src="../images/glvs_logo.png" alt="로고" />
           </router-link>
         </h1>
+        <div class="content-tit1">
+          <h2 class="tit1">Get Your Good Luck VIP Phone Number Today!</h2>
+        </div>
 <!--        <nav class="gnb-area">
           <ul class="gnb-menu">
             <li>
