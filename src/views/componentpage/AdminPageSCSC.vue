@@ -8,7 +8,7 @@
         <h2 class="lnb-tit">MENU</h2>
         <ul class="lnb-menu">
           <li class="sub">
-            <a href="#none">SELLER</a>
+            <router-link to="/seller">SELLER</router-link>
           </li>
           <li class="sub on">
             <a class="active">ADMIN</a>

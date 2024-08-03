@@ -107,36 +107,38 @@
                   <button type="button" class="type3" @click="showModal = true">Upload Phone Number</button>
                 </div>
               </div>
-            </div>
 
-            <div class="modal" :class="{ show: showModal }" @click.self="showModal = false">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h2>Upload Phone Number</h2>
-                  <span class="close-btn" @click="showModal = false">&times;</span>
-                </div>
-                <div class="modal-body">
-                  <div class="modal-section">
-                    <p>Prefix Number:</p>
-                    <p>Category:</p>
-                    <p>Phone Number:</p>
-                    <p>Price(MYR/RM):</p>
-                    <p>Status:</p>
-                    <p>Upload Date:</p>
+              <div class="modal" :class="{ show: showModal }" @click.self="showModal = false">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h2>Upload Phone Number</h2>
+                    <span class="close-btn" @click="showModal = false">&times;</span>
                   </div>
-                  <div class="modal-section">
-                    <input>
-                    <input>
-                    <input>
-                    <input>
-                    <input>
-                    <input>
+                  <div class="modal-body">
+                    <div class="modal-section">
+                      <p>Prefix Number:</p>
+                      <p>Category:</p>
+                      <p>Phone Number:</p>
+                      <p>Price(MYR/RM):</p>
+                      <p>Status:</p>
+                      <p>Upload Date:</p>
+                    </div>
+                    <div class="modal-section">
+                      <input v-model="form.prefixNumber" placeholder="Prefix Number">
+                      <input v-model="form.category" placeholder="Category">
+                      <input v-model="form.phoneNumber" placeholder="Phone Number">
+                      <input v-model="form.price" placeholder="Price(MYR/RM)">
+                      <input v-model="form.status" placeholder="Status">
+                      <input v-model="form.uploadDate" placeholder="Upload Date">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" @click="submitForm">Submit</button>
+                    <button type="button" @click="showModal = false">Cancel</button>
                   </div>
                 </div>
               </div>
             </div>
-
-          </div>
 
 
 
@@ -177,8 +179,8 @@
 
           <tbody>
           <tr v-for="salePhnNum in filteredPhnNums" :key="salePhnNum.sale_id">
-            <td>{{ salePhnNum.sale_phn_pfx_nm }}</td>
-            <td>{{ salePhnNum.sale_ctgr_nm }}</td>
+            <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
+            <td>{{ salePhnNum.sale_ctgr_cd }}</td>
             <td>{{ salePhnNum.sale_phn_num }}</td>
             <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
             <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
@@ -213,6 +215,7 @@
       </div>
     </div>
   </div>
+  </div>
   <PageFooter/>
 </template>
 
@@ -233,7 +236,15 @@ export default {
       priceMin: '',
       priceMax: '',
       salePhnNums: [],
-      filteredPhnNums: []
+      filteredPhnNums: [],
+      form: {
+        prefixNumber: '',
+        category: '',
+        phoneNumber: '',
+        price: '',
+        status: '',
+        uploadDate: ''
+      }
     };
   },
 
@@ -257,6 +268,7 @@ export default {
         console.error('Error fetching components:', error);
       }
     },
+
     search() {
       this.filteredPhnNums = this.salePhnNums.filter(phnNum => {
         const matchesPhoneNumber = !this.phoneNumber || phnNum.sale_phn_num.includes(this.phoneNumber);
@@ -271,15 +283,54 @@ export default {
         // 返回所有条件都匹配的结果
         return matchesPhoneNumber && matchesCategory && matchesPriceMin && matchesPriceMax;
       });
-
-
     },
+
     reset() {
       this.phoneNumber = '';
       this.category = '';
       this.priceMin = '';
       this.priceMax = '';
       this.filteredPhnNums = this.salePhnNums;
+    },
+
+    submitForm() {
+      // 确保表单中的所有字段都有值
+      if (Object.values(this.form).some(value => value === '')) {
+        alert('Please fill in all fields.');
+        return;
+      }
+
+      const token = localStorage.getItem('token');
+
+      // 将表单数据上传到后端
+      axios.post('http://localhost:8081/upload_phone', {
+        sale_phn_pfx_cd: this.form.prefixNumber,
+        sale_ctgr_cd: this.form.category,
+        sale_phn_num: this.form.phoneNumber,
+        sale_price: this.form.price,
+        sale_status_cd: this.form.status,
+        rgst_dt: this.form.uploadDate
+      },{
+        headers: {
+          token: `${token}`
+        }})
+          .then(() => {
+            alert('Data submitted successfully!');
+            this.showModal = false;
+            // 清空表单数据
+            this.form = {
+              prefixNumber: '',
+              category: '',
+              phoneNumber: '',
+              price: '',
+              status: '',
+              uploadDate: ''
+            };
+          })
+          .catch(error => {
+            console.error('Error submitting form:', error);
+            alert('Error submitting data.');
+          });
     }
   },
 
@@ -289,10 +340,9 @@ export default {
     priceMin: 'search',
     priceMax: 'search'
   }
-
-
 };
 </script>
+
 
 
 <style scoped>

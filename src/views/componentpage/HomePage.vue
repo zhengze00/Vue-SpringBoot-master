@@ -120,12 +120,12 @@
 
             <tbody>
             <tr v-for="salePhnNum in filteredPhnNums" :key="salePhnNum.sale_id">
-              <td>{{ salePhnNum.sale_phn_pfx_nm }}</td>
-              <td>{{ salePhnNum.sale_ctgr_nm }}</td>
+              <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
+              <td>{{ salePhnNum.sale_ctgr_cd }}</td>
               <td>{{ salePhnNum.sale_phn_num }}</td>
               <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
               <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
-              <td>{{ salePhnNum.sale_status_nm }}</td>
+              <td>{{ salePhnNum.sale_status_cd }}</td>
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
               <td>{{ salePhnNum.sale_contact }}</td>
@@ -166,38 +166,52 @@
                    <h2>Sales Status of Each Prefix Number</h2>
                    <span class="close-btn" @click="showModal = false">&times;</span>
                  </div>
-                <div class="modal-body">
-                  <div class="modal-section">
-                    <h3>Prefix Number:</h3>
-                    <p>010:</p>
-                    <p>011:</p>
-                    <p>012:</p>
-                    <p>013:</p>
-                    <p>014:</p>
-                    <p>015:</p>
-                    <p>016:</p>
-                    <p>017:</p>
-                    <p>018:</p>
-                    <p>019:</p>
-                    <p>0192:</p>
-                    <p>0193:</p>
-                  </div>
-                  <div class="modal-section">
-                    <h3>Total Sales:</h3>
-                    <p>1000</p>
-                    <p>599</p>
-                    <p>26</p>
-                    <p>46</p>
-                    <p>26</p>
-                    <p>56</p>
-                    <p>48</p>
-                    <p>19</p>
-                    <p>86</p>
-                    <p>26</p>
-                    <p>59</p>
-                    <p>26</p>
-                  </div>
-                </div>
+<!--                <div class="modal-body">-->
+<!--                  <div class="modal-section">-->
+<!--                    <h3>Prefix Number:</h3>-->
+<!--                    <p>010:</p>-->
+<!--                    <p>011:</p>-->
+<!--                    <p>012:</p>-->
+<!--                    <p>013:</p>-->
+<!--                    <p>014:</p>-->
+<!--                    <p>015:</p>-->
+<!--                    <p>016:</p>-->
+<!--                    <p>017:</p>-->
+<!--                    <p>018:</p>-->
+<!--                    <p>019:</p>-->
+<!--                    <p>0192:</p>-->
+<!--                    <p>0193:</p>-->
+<!--                  </div>-->
+<!--                  <div class="modal-section">-->
+<!--                    <h3>Total Sales:</h3>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                    <p></p>-->
+<!--                  </div>-->
+<!--                </div>-->
+                <table>
+                  <thead>
+                  <tr>
+                    <th>Phone Prefix</th>
+                    <th>Sold Count</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="item in soldCountByPrefix" :key="item.phonePrefix">
+                    <td>{{ item.phone_prefix }}</td>
+                    <td>{{ item.sold_count }}</td>
+                  </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -224,7 +238,8 @@ export default {
       priceMin: '',
       priceMax: '',
       salePhnNums: [],
-      filteredPhnNums: []
+      filteredPhnNums: [],
+      soldCountByPrefix: []
     };
   },
 
@@ -235,6 +250,7 @@ export default {
 
   created() {
     this.fetchSalePhnNums();
+    this.fetchSoldCountByPrefix();
   },
 
   methods: {
@@ -251,7 +267,7 @@ export default {
     search() {
       this.filteredPhnNums = this.salePhnNums.filter(phnNum => {
         const matchesPhoneNumber = !this.phoneNumber || phnNum.sale_phn_num.includes(this.phoneNumber);
-        const matchesCategory = !this.category || phnNum.sale_ctgr_nm === this.category;
+        const matchesCategory = !this.category || phnNum.sale_ctgr_cd === this.category;
         const priceMinNum = parseFloat(this.priceMin);
         const priceMaxNum = parseFloat(this.priceMax);
         const salePriceNum = parseFloat(phnNum.sale_price);
@@ -271,7 +287,17 @@ export default {
       this.priceMin = '';
       this.priceMax = '';
       this.filteredPhnNums = this.salePhnNums;
+    },
+
+    async fetchSoldCountByPrefix() {
+      try {
+        const response = await axios.get('http://localhost:8081/getPfxCount');
+        this.soldCountByPrefix = response.data;
+      } catch (error) {
+        console.error('Error fetching sold count by prefix:', error);
+      }
     }
+
   },
 
   watch: {

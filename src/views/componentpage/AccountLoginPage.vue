@@ -1,8 +1,4 @@
-
 <template>
-
-
-  <!-- layer-pop-wrap : S -->
   <div class="layer-pop-wrap" style="display:block;">
     <div class="layer-pop-bg"></div>
     <div class="layer-pop-area" style="width: 400px">
@@ -10,60 +6,52 @@
         <h3>GoodLuckVIPStore CMS</h3>
       </div>
       <div class="pop-body">
-        <!-- 删除现有的文本 -->
         <div class="input-group">
-          <input type="text" class="pop-input" placeholder="Username:  admin / seller ">
-          <input type="password" class="pop-input" placeholder="Password: 123456">
+          <input v-model="user_nm" type="text" class="pop-input" placeholder="Username: admin / seller">
+          <input v-model="user_pw" type="password" class="pop-input" placeholder="Password: 123456">
         </div>
         <div class="pop-btn-area">
           <router-link to="/home" class="pop-btn">Return</router-link>
-          <router-link to="/seller" class="pop-btn type2">Login</router-link>
+          <button @click="handleLogin" class="pop-btn type2">Login</button>
         </div>
       </div>
     </div>
   </div>
-  <!-- layer-pop-wrap : E -->
 </template>
 
-
 <script>
-
 import axios from 'axios';
 
 export default {
   data() {
     return {
-      salePhnNums: [],
-      exchangeRate: 1,
-      showModal: false
+      user_nm: '',
+      user_pw: '',
     };
   },
 
-  components: {
-
-  },
-
-  created() {
-    this.fetchSalePhnNums();
-  },
   methods: {
-    async fetchSalePhnNums() {
+    async handleLogin() {
       try {
-        const response = await axios.get('http://localhost:8081/getSalePhnNum');
-        this.salePhnNums = response.data.salePhnNums;
-        this.exchangeRate = parseFloat(response.data.exchangeRate); // 获取汇率
+        const response = await axios.post('http://localhost:8081/login', {
+          user_nm: this.user_nm,
+          user_pw: this.user_pw,
+        });
+
+        if (response.data.code===1) {
+          // 保存 JWT 到本地存储
+          localStorage.setItem('token', response.data.data);
+          // 跳转到主页面
+          this.$router.push('/seller');
+        } else {
+          alert('Invalid pw');
+        }
       } catch (error) {
-        console.error('Error fetching components:', error);
+        console.error('Error during login:', error);
       }
     }
   }
-
-
-
 };
-
-
-
 </script>
 
 <style scoped>
