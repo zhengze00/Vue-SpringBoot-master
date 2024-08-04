@@ -38,13 +38,14 @@ export default {
           user_pw: this.user_pw,
         });
 
-        if (response.data.code===1) {
-          // 保存 JWT 到本地存储
+        if (response.data.code === 1) {
+          // 保存 JWT 和用户类型到本地存储
           localStorage.setItem('token', response.data.data);
+          localStorage.setItem('user_typ_cd', response.data.user_typ_cd); // 假设返回的响应中包含 user_typ_cd
           // 跳转到主页面
           this.$router.push('/seller');
         } else {
-          alert('Invalid pw');
+          alert('Wrong username/password. Please type again');
         }
       } catch (error) {
         console.error('Error during login:', error);

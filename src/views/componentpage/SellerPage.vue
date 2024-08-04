@@ -9,7 +9,7 @@
           <li class="sub on">
             <router-link to="/seller" class="active">SELLER</router-link>
             <ul class="lnb-menu-sub" style="display: block">
-              <li><a  class="active">Manage Phone Number</a></li>
+              <li><a class="active">Manage Phone Number</a></li>
             </ul>
           </li>
           <li class="sub">
@@ -18,7 +18,6 @@
             </ul>
           </li>
         </ul>
-
       </aside>
       <div class="content">
         <div class="content-tit">
@@ -42,55 +41,55 @@
               <li class="fix">
                 <strong>Category:</strong>
                 <span class="input-style">
-                                        <select v-model="category">
-                                          <option>ALL</option>
-                                          <option>0.1.2.3 SERIES</option>
-                                          <option>0.1.9 SERIES</option>
-                                          <option>1314 SERIES</option>
-                                          <option>520 SERIES</option>
-                                          <option>AAA SERIES</option>
-                                          <option>AAAA SERIES</option>
-                                          <option>AAAAA SERIES</option>
-                                          <option>AAAAAA SERIES</option>
-                                          <option>AAAB SERIES</option>
-                                          <option>AABA SERIES</option>
-                                          <option>AABAA SERIES</option>
-                                          <option>AABB SERIES</option>
-                                          <option>AABBCC SERIES</option>
-                                          <option>AABBCCDD SERIES</option>
-                                          <option>AB SERIES</option>
-                                          <option>ABAA SERIES</option>
-                                          <option>ABAA/AABA SERIES</option>
-                                          <option>ABAB SERIES</option>
-                                          <option>ABABAB SERIES</option>
-                                          <option>ABBA SERIES</option>
-                                          <option>ABBB SERIES</option>
-                                          <option>BOSS SERIES</option>
-                                          <option>FENGSHUI 1349 SERIES</option>
-                                          <option>FENGSHUI 2678 SERIES</option>
-                                          <option>ICHING SERIES</option>
-                                          <option>LADDER SERIES</option>
-                                          <option>MATAFIZIK SERIES</option>
-                                          <option>NORMAL SERIES</option>
-                                          <option>ONG 88 SERIES</option>
-                                          <option>OTHER SERIES</option>
-                                          <option>REPEAT SERIES</option>
-                                          <option>THOUSAND NUMBER SERIES</option>
-                                          <option>YEAR SERIES</option>
-                                        </select>
-                                    </span>
+                  <select v-model="category">
+                    <option>ALL</option>
+                    <option>0.1.2.3 SERIES</option>
+                    <option>0.1.9 SERIES</option>
+                    <option>1314 SERIES</option>
+                    <option>520 SERIES</option>
+                    <option>AAA SERIES</option>
+                    <option>AAAA SERIES</option>
+                    <option>AAAAA SERIES</option>
+                    <option>AAAAAA SERIES</option>
+                    <option>AAAB SERIES</option>
+                    <option>AABA SERIES</option>
+                    <option>AABAA SERIES</option>
+                    <option>AABB SERIES</option>
+                    <option>AABBCC SERIES</option>
+                    <option>AABBCCDD SERIES</option>
+                    <option>AB SERIES</option>
+                    <option>ABAA SERIES</option>
+                    <option>ABAA/AABA SERIES</option>
+                    <option>ABAB SERIES</option>
+                    <option>ABABAB SERIES</option>
+                    <option>ABBA SERIES</option>
+                    <option>ABBB SERIES</option>
+                    <option>BOSS SERIES</option>
+                    <option>FENGSHUI 1349 SERIES</option>
+                    <option>FENGSHUI 2678 SERIES</option>
+                    <option>ICHING SERIES</option>
+                    <option>LADDER SERIES</option>
+                    <option>MATAFIZIK SERIES</option>
+                    <option>NORMAL SERIES</option>
+                    <option>ONG 88 SERIES</option>
+                    <option>OTHER SERIES</option>
+                    <option>REPEAT SERIES</option>
+                    <option>THOUSAND NUMBER SERIES</option>
+                    <option>YEAR SERIES</option>
+                  </select>
+                </span>
               </li>
               <li class="fix">
                 <strong>Price Range(Min):</strong>
                 <span class="input-style">
-                                      <input type="text" v-model="priceMin" placeholder="" />
-                                    </span>
+                  <input type="text" v-model="priceMin" placeholder="" />
+                </span>
               </li>
               <li class="fix">
                 <strong>Price Range(Max):</strong>
                 <span class="input-style">
-                                          <input type="text" v-model="priceMax" placeholder="" />
-                                    </span>
+                  <input type="text" v-model="priceMax" placeholder="" />
+                </span>
               </li>
             </ul>
 
@@ -98,8 +97,6 @@
               <button type="button" @click="search">Search</button>
               <button type="button" class="type2" @click="reset">Reset</button>
             </div>
-
-
 
             <div id="app">
               <div class="btn-area">
@@ -124,12 +121,12 @@
                       <p>Upload Date:</p>
                     </div>
                     <div class="modal-section">
-                      <input v-model="form.prefixNumber" placeholder="Prefix Number">
-                      <input v-model="form.category" placeholder="Category">
-                      <input v-model="form.phoneNumber" placeholder="Phone Number">
-                      <input v-model="form.price" placeholder="Price(MYR/RM)">
-                      <input v-model="form.status" placeholder="Status">
-                      <input v-model="form.uploadDate" placeholder="Upload Date">
+                      <input v-model="form.prefixNumber" placeholder="Prefix Number" />
+                      <input v-model="form.category" placeholder="Category" />
+                      <input v-model="form.phoneNumber" placeholder="Phone Number" />
+                      <input v-model="form.price" placeholder="Price(MYR/RM)" />
+                      <input v-model="form.status" placeholder="Status" />
+                      <input v-model="form.uploadDate" placeholder="Upload Date" />
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -140,86 +137,61 @@
               </div>
             </div>
 
+          </div>
+          <!-- //search-area -->
 
+          <table class="table-style t-center list">
+            <thead>
+            <tr>
+              <th>PREFIX NUMBER</th>
+              <th>CATEGORY</th>
+              <th>PHONE NUMBER</th>
+              <th>PRICE (MYR/RM)</th>
+              <th>PRICE (KRW/WON)</th>
+              <th>STATUS</th>
+              <th>UPLOAD DATE</th>
+              <th>OWNER</th>
+              <th>CONTACT NUMBER</th>
+              <th>OPERATION</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr v-for="salePhnNum in paginatedPhnNums" :key="salePhnNum.sale_id">
+              <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
+              <td>{{ salePhnNum.sale_ctgr_cd }}</td>
+              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                {{ salePhnNum.sale_phn_num }}
+              </td>
+              <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
+              <td style="text-align: right;">
+                {{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}
+              </td>
+              <td>{{ salePhnNum.sale_status_cd }}</td>
+              <td>{{ salePhnNum.rgst_dt }}</td>
+              <td>{{ salePhnNum.rgst_nm }}</td>
+              <td>{{ salePhnNum.sale_contact }}</td>
+              <td></td>
+            </tr>
+            </tbody>
+
+          </table>
+          <!-- //table-style -->
+
+          <div class="pageing">
+            <a class="first" @click="goToPage(1)" :class="{ disabled: currentPage === 1 }"></a>
+            <a class="pre" @click="goToPage(currentPage - 1)" :class="{ disabled: currentPage === 1 }"></a>
+            <a v-for="page in totalPages" :key="page" @click="goToPage(page)" :class="{ selected: currentPage === page }">{{ page }}</a>
+            <a class="next" @click="goToPage(currentPage + 1)" :class="{ disabled: currentPage === totalPages }"></a>
+            <a class="last" @click="goToPage(totalPages)" :class="{ disabled: currentPage === totalPages }"></a>
+          </div>
 
         </div>
-        <!-- //search-area -->
-
-        <table class="table-style t-center list">
-          <!--             <colgroup>
-                              <col style="width:100px;">
-                              <col style="width:100px;">
-                              <col style="width:100px;">
-                              <col style="width:100px;">
-                              <col style="width:100px;">
-                              <col style="width:100px;">
-                              <col style="width:100px;">
-                              <col style="width:100px;">
-                              <col style="width:100px;">
-                          </colgroup>-->
-          <thead>
-          <!--             <tr>
-                          <th rowspan="2">구분</th>
-                          <th colspan="7">EAI</th>
-                          <th colspan="3">EIGW</th>
-                      </tr>-->
-          <tr>
-            <th>PREFIX NUMBER</th>
-            <th>CATEGORY</th>
-            <th>PHONE NUMBER</th>
-            <th>PRICE (MYR/RM)</th>
-            <th>PRICE (KRW/WON)</th>
-            <th>STATUS</th>
-            <th>UPLOAD DATE</th>
-            <th>OWNER</th>
-            <th>CONTACT NUMBER</th>
-            <th>OPERATION</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <tr v-for="salePhnNum in filteredPhnNums" :key="salePhnNum.sale_id">
-            <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
-            <td>{{ salePhnNum.sale_ctgr_cd }}</td>
-            <td>{{ salePhnNum.sale_phn_num }}</td>
-            <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
-            <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
-            <td>{{ salePhnNum.sale_status_nm }}</td>
-            <td>{{ salePhnNum.rgst_dt }}</td>
-            <td>{{ salePhnNum.rgst_nm }}</td>
-            <td>{{ salePhnNum.sale_contact }}</td>
-            <td></td>
-          </tr>
-          </tbody>
-
-        </table>
-        <!-- //table-style -->
-
-        <div class="pageing">
-          <a class="first"></a>
-          <a class="pre"></a>
-          <a class="selected">1</a>
-          <a>2</a>
-          <a>3</a>
-          <a>4</a>
-          <a>5</a>
-          <a>6</a>
-          <a>7</a>
-          <a>8</a>
-          <a>9</a>
-          <a>10</a>
-          <a class="next"></a>
-          <a class="last"></a>
-        </div>
-
       </div>
     </div>
   </div>
-  </div>
   <PageFooter/>
 </template>
-
-
 
 <script>
 import PageHeader from '@/components/PageHeader';
@@ -244,7 +216,9 @@ export default {
         price: '',
         status: '',
         uploadDate: ''
-      }
+      },
+      currentPage: 1,
+      itemsPerPage: 20 // 每页显示20条记录
     };
   },
 
@@ -270,9 +244,12 @@ export default {
     },
 
     search() {
+      const formattedPhoneNumber = this.phoneNumber.replace(/-/g, '');
+
       this.filteredPhnNums = this.salePhnNums.filter(phnNum => {
-        const matchesPhoneNumber = !this.phoneNumber || phnNum.sale_phn_num.includes(this.phoneNumber);
-        const matchesCategory = !this.category || phnNum.sale_ctgr_nm === this.category;
+        const formattedSalePhnNum = phnNum.sale_phn_num.replace(/-/g, '');
+        const matchesPhoneNumber = !formattedPhoneNumber || formattedSalePhnNum.includes(formattedPhoneNumber);
+        const matchesCategory = !this.category || phnNum.sale_ctgr_cd === this.category;
         const priceMinNum = parseFloat(this.priceMin);
         const priceMaxNum = parseFloat(this.priceMax);
         const salePriceNum = parseFloat(phnNum.sale_price);
@@ -280,9 +257,10 @@ export default {
         const matchesPriceMin = isNaN(priceMinNum) || salePriceNum >= priceMinNum;
         const matchesPriceMax = isNaN(priceMaxNum) || salePriceNum <= priceMaxNum;
 
-        // 返回所有条件都匹配的结果
         return matchesPhoneNumber && matchesCategory && matchesPriceMin && matchesPriceMax;
       });
+
+      this.currentPage = 1; // 重置到第一页
     },
 
     reset() {
@@ -291,10 +269,10 @@ export default {
       this.priceMin = '';
       this.priceMax = '';
       this.filteredPhnNums = this.salePhnNums;
+      this.currentPage = 1; // 重置到第一页
     },
 
     submitForm() {
-      // 确保表单中的所有字段都有值
       if (Object.values(this.form).some(value => value === '')) {
         alert('Please fill in all fields.');
         return;
@@ -302,7 +280,6 @@ export default {
 
       const token = localStorage.getItem('token');
 
-      // 将表单数据上传到后端
       axios.post('http://localhost:8081/upload_phone', {
         sale_phn_pfx_cd: this.form.prefixNumber,
         sale_ctgr_cd: this.form.category,
@@ -317,7 +294,6 @@ export default {
           .then(() => {
             alert('Data submitted successfully!');
             this.showModal = false;
-            // 清空表单数据
             this.form = {
               prefixNumber: '',
               category: '',
@@ -331,6 +307,23 @@ export default {
             console.error('Error submitting form:', error);
             alert('Error submitting data.');
           });
+    },
+
+    goToPage(page) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page;
+      }
+    }
+  },
+
+  computed: {
+    totalPages() {
+      return Math.ceil(this.filteredPhnNums.length / this.itemsPerPage);
+    },
+    paginatedPhnNums() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.filteredPhnNums.slice(start, end);
     }
   },
 
@@ -343,9 +336,9 @@ export default {
 };
 </script>
 
-
-
 <style scoped>
 @import "@/assets/common_new.css";
 @import "@/assets/reset.css";
+
+/* Add any additional styles here */
 </style>

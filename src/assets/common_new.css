@@ -528,18 +528,22 @@
 .container {
     display: flex;
     align-items: stretch;
-    justify-content: space-evenly;
+    justify-content: flex-start; /* 确保子元素不居中 */
     min-height: calc(100vh - 112px);
+    width: 100%; /* 确保占满宽度 */
 }
 .content {
-    width: calc(100% - 220px);
-    box-sizing: border-box;
-    padding: 30px;
-    min-height: 700px;
+    width: 1324px; /* 设置为固定宽度 */
+    box-sizing: border-box; /* 包括内边距和边框在内的宽度计算 */
+    padding: 30px; /* 内边距 */
+    min-height: 700px; /* 最小高度 */
+    margin-left: 0; /* 确保没有水平居中 */
+    margin-right: 0; /* 确保没有水平居中 */
 }
 .template.min {
-    width: 1250px;
-    margin: 0 auto 0 5px;
+    width: 100%; /* 确保模板宽度不超过内容宽度 */
+    max-width: 1326px; /* 与内容宽度对齐 */
+    margin: 0; /* 移除水平外边距 */
 }
 
 /* TITLE */
@@ -1024,67 +1028,36 @@ textarea:focus,
     background: url("../images/ico_radio_on.png") no-repeat 0 50%;
 }
 
-/* 테이블 스타일 */
+/* 固定表格宽度 */
 .table-style {
-    width: 100%; /* 表格宽度为100% */
-    table-layout: fixed; /* 固定表格布局 */
+    width: 1200px; /* 根据需要调整为固定宽度 */
+    table-layout: auto; /* 允许列宽根据内容自动调整 */
     border-top: 2px solid #43496b;
-    word-break: break-all;
-    border-collapse: collapse;
-}
-.table-container {
-    max-width: 100%; /* 限制最大宽度为页面宽度 */
-    overflow-x: auto; /* 当内容超过最大宽度时，添加水平滚动条 */
-}
-.table-style {
-    width: 100%; /* 表格宽度为100% */
-    table-layout: fixed; /* 固定表格布局 */
-    border-top: 2px solid #43496b;
-    word-break: break-all;
     border-collapse: collapse;
 }
 
-.table-style td.num {
-    color: #999;
+/* 固定表格容器宽度 - 可以根据需要调整 */
+.table-container {
+    width: 1200px; /* 与表格宽度相同 */
 }
-.table-style td.tps {
-    color: #666;
-    font-weight: 900;
+
+/* 表头样式，确保列宽根据内容调整 */
+.table-style th {
+    white-space: nowrap; /* 防止标题折行 */
+    padding: 8px; /* 适当的内边距 */
 }
-.table-style td.code {
-    color: #666;
+
+/* 表格内容单元格样式 */
+.table-style td {
+    white-space: nowrap; /* 防止内容折行 */
+    padding: 8px; /* 适当的内边距 */
 }
-.table-style td.name {
-    color: #222;
-    font-weight: 700;
+
+/* 其他样式保持不变 */
+.table-style {
+    text-align: left; /* 不居中显示 */
 }
-.table-style td.accu {
-    color: #f07f2b;
-    font-weight: 900;
-}
-.table-style td .i-status {
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background-color: #f07f2b;
-    vertical-align: -3px;
-}
-.table-style td .i-status.type2 {
-    background-color: #1ab687;
-}
-.table-style td .i-status.type3 {
-    background-color: #e9e51b;
-}
-/* .table-style.list tbody tr:nth-child(even) td {
-    background: #f6f6fc;
-} */
-.table-style.t-center {
-    text-align: center;
-}
-.table-style.t-center th {
-    text-align: center;
-}
+
 .table-style tbody tr.on {
     background: #affafa;
 }
@@ -1095,72 +1068,6 @@ textarea:focus,
 
 .table-style a {
     font-weight: 700;
-}
-
-/* 테이블 스타일 Mini*/
-.table-style.sm {
-    table-layout: fixed;
-    width: 100%;
-    border-top: 2px solid #43496b;
-    /* border-right: 1px solid #d7d7d7; */
-    word-break: break-all;
-    border-collapse: inherit;
-}
-.table-style.sm th {
-    height: 30px;
-    font-size: 12px;
-    color: #444;
-    font-weight: 600;
-    padding: 4px;
-    background: #f9fbfd;
-    /* border-left: 1px solid #d7d7d7; */
-    border-bottom: 1px solid #d7d7d7;
-    text-align: center;
-}
-.table-style.sm tbody th {
-    text-align: left;
-    padding: 0 5px;
-    font-weight: 600;
-}
-.table-style.sm td {
-    height: 30px;
-    font-size: 12px;
-    color: #444;
-    padding: 3px 5px;
-    /* border-left: 1px solid #d7d7d7; */
-    border-bottom: 1px solid #d7d7d7;
-    /*background: #fff;*/
-    line-height: 17px;
-}
-.table-style.sm td.num {
-    color: #999;
-}
-.table-style.sm td.tps {
-    color: #666;
-    font-weight: 700;
-}
-.table-style.sm td.code {
-    color: #666;
-}
-.table-style.sm td.name {
-    color: #222;
-    font-weight: 600;
-}
-.table-style.sm td.accu {
-    color: #f07f2b;
-    font-weight: 700;
-}
-
-.table-style.sm tbody tr.on {
-    background: #affafa;
-}
-
-.table-style.sm a:hover {
-    text-decoration: underline;
-}
-
-.table-style.sm a {
-    font-weight: 600;
 }
 
 .ellips {
@@ -1993,6 +1900,16 @@ textarea:focus,
 .progress-step li.arrow {
     width: 3.5%;
     background: url(../images/ico_process_arrow.png) no-repeat center;
+}
+.table-style td {
+    white-space: nowrap; /* 防止内容折行 */
+}
+.table-style th {
+    white-space: nowrap; /* 防止标题折行 */
+}
+.table-style th {
+    min-width: 80px; /* 可根据需要调整最小宽度 */
+    max-width: 200px; /* 可根据需要调整最大宽度 */
 }
 .table-style th.eai {
     color: #1598e1;
