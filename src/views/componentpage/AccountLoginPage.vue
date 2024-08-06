@@ -1,4 +1,5 @@
 <template>
+  <PageHeader2/>
   <div class="layer-pop-wrap" style="display:block;">
     <div class="layer-pop-bg"></div>
     <div class="layer-pop-area" style="width: 400px">
@@ -21,8 +22,10 @@
 
 <script>
 import axios from 'axios';
+import PageHeader2 from "@/components/PageHeader2.vue";
 
 export default {
+  components: {PageHeader2},
   data() {
     return {
       user_nm: '',
@@ -41,7 +44,6 @@ export default {
         if (response.data.code === 1) {
           // 保存 JWT 和用户类型到本地存储
           localStorage.setItem('token', response.data.data);
-          localStorage.setItem('user_typ_cd', response.data.user_typ_cd); // 假设返回的响应中包含 user_typ_cd
           // 跳转到主页面
           this.$router.push('/seller');
         } else {

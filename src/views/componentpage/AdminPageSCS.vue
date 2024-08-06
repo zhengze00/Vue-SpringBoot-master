@@ -1,20 +1,17 @@
 <template>
   <PageHeader/>
-
   <div class="wrap">
-    <!-- container : S -->
     <div class="container">
       <aside class="lnb">
         <h2 class="lnb-tit">MENU</h2>
         <ul class="lnb-menu">
-          <li class="sub">
+          <li class="sub ">
             <router-link to="/seller">SELLER</router-link>
           </li>
-          <li class="sub on">
-            <a class="active">ADMIN</a>
+          <li class="sub">
+            <a href="/admin/scs"  class="active">ADMIN</a>
             <ul class="lnb-menu-sub" style="display: block">
               <li><a class="active">Sales Commission Settlement</a></li>
-              <li><router-link to="/admin/scsc">Sales Settlement Commission Completed</router-link></li>
             </ul>
           </li>
         </ul>
@@ -29,30 +26,24 @@
             <li>Sales Commission Settlement</li>
           </ul>
         </div>
+        <!-- Page header and navigation -->
         <div class="template min">
           <div class="search-area">
+            <!-- Search filters -->
             <ul class="search-list">
               <li class="fix">
                 <strong>Owner:</strong>
                 <span class="input-style">
                   <select v-model="selectedOwner">
                     <option value="">ALL</option>
-                    <option value="John">John</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="F">F</option>
-                    <option value="G">G</option>
-                    <option value="H">H</option>
+                    <option v-for="owner in owners" :key="owner" :value="owner">{{ owner }}</option>
                   </select>
                 </span>
               </li>
               <li class="fix">
                 <strong>Date:</strong>
                 <span class="input-style">
-                  <input v-model="startDate" type="date"  />
+                  <input v-model="startDate" type="date" />
                 </span>
                 <em>~</em>
                 <span class="input-style">
@@ -60,19 +51,18 @@
                 </span>
               </li>
             </ul>
-
             <div class="search-btn">
               <button type="button" @click="fetchSalePhnNums">Search</button>
+            </div>
+            <div class="search-btn">
               <button type="button" class="type2" @click="resetFilters">Reset</button>
             </div>
           </div>
-          <!-- //search-area -->
-
           <table class="table-style t-center list">
             <thead>
             <tr>
               <th>NO</th>
-              <th>PREFIX NUMBER</th>
+              <th>PREFIX <br>NUMBER</th>
               <th>CATEGORY</th>
               <th>PHONE NUMBER</th>
               <th>PRICE <br>(MYR/RM)</th>
@@ -90,22 +80,26 @@
               <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
               <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
               <td>{{ salePhnNum.sale_ctgr_cd }}</td>
-              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px;">
                 {{ salePhnNum.sale_phn_num }}
               </td>
               <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
-              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
+              <td style="text-align: right;">
+                {{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}
+              </td>
               <td>{{ salePhnNum.sale_status_cd }}</td>
-              <td style="text-align: right;">{{ salePhnNum.owner_cost_myr }}</td>
-              <td style="text-align: right;">{{ (salePhnNum.owner_cost_myr * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
+              <td style="text-align: right;">
+                {{ (salePhnNum.sale_price * settlementRate).toFixed(0) }}
+              </td>
+              <td style="text-align: right;">
+                {{ (salePhnNum.sale_price * settlementRate * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}
+              </td>
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
-              <td>{{ salePhnNum.user_bank_acc }}</td>
+              <td>{{ salePhnNum.user_bank_acc }}</td> <!-- Update this line -->
             </tr>
             </tbody>
           </table>
-          <!-- //table-style -->
-
           <div class="pageing">
             <a class="first" @click="goToPage(1)" :class="{ disabled: currentPage === 1 }"></a>
             <a class="pre" @click="goToPage(currentPage - 1)" :class="{ disabled: currentPage === 1 }"></a>
@@ -114,9 +108,11 @@
             <a class="last" @click="goToPage(totalPages)" :class="{ disabled: currentPage === totalPages }"></a>
           </div>
           <div class="btn-area">
-            <a class="">Total Own: {{ totalOwnerPrice }}</a>
-            <a class="">Settlement Rate: (90%)</a>
-            <a class="next">Settlement Completed</a>
+            <a class="">Total Own: {{ totalOwnerPrice.toFixed(0) }}</a>
+            <a class="">Settlement Rate: ({{ (settlementRate * 100) }}%)</a>
+          </div>
+          <div class="pop-btn-area">
+            <button class="pop-btn type2" @click="markSettlementCompleted">Settlement Completed</button>
           </div>
         </div>
       </div>
@@ -135,11 +131,13 @@ export default {
     return {
       salePhnNums: [],
       exchangeRate: 1,
-      selectedOwner: 'John', // 默认选择“ALL”
-      startDate: '', // 绑定到开始日期输入框
-      endDate: '', // 绑定到结束日期输入框
+      settlementRate: 1,
+      selectedOwner: '', // Default to empty so that ALL is the default
+      startDate: '',
+      endDate: '',
       currentPage: 1,
-      itemsPerPage: 20 // 每页显示20条记录
+      itemsPerPage: 20, // Number of items per page
+      owners: [] // List of unique owners
     };
   },
 
@@ -149,23 +147,24 @@ export default {
   },
 
   created() {
-    this.fetchSalePhnNums(); // 初始化时获取数据
+    this.fetchSalePhnNums(); // Fetch data when component is created
   },
 
   computed: {
     filteredSalePhnNums() {
       return this.salePhnNums.filter(salePhnNum => {
-        // 过滤所有者
+        // 处理过滤逻辑
+        const isSoldOut = salePhnNum.sale_status_cd === 'SoldOut';
+
         const matchesOwner = !this.selectedOwner || salePhnNum.rgst_nm === this.selectedOwner;
 
-        // 过滤日期范围
         const saleDate = new Date(salePhnNum.rgst_dt);
         const startDate = this.startDate ? new Date(this.startDate) : new Date(-8640000000000000); // -Infinity
         const endDate = this.endDate ? new Date(this.endDate) : new Date(8640000000000000); // +Infinity
 
         const matchesDateRange = saleDate >= startDate && saleDate <= endDate;
 
-        return matchesOwner && matchesDateRange;
+        return isSoldOut && matchesOwner && matchesDateRange;
       });
     },
     totalPages() {
@@ -178,34 +177,78 @@ export default {
     },
     totalOwnerPrice() {
       return this.filteredSalePhnNums.reduce((total, salePhnNum) => {
-        return total + parseFloat(salePhnNum.sale_price || 0);
+        return total + (parseFloat(salePhnNum.sale_price || 0) * this.settlementRate);
       }, 0);
     }
   },
 
   methods: {
-    async fetchSalePhnNums() {
+    async markSettlementCompleted() {
+      if (!this.selectedOwner) {
+        alert('Please select an owner.');
+        return;
+      }
       try {
-        const response = await axios.get('http://localhost:8081/getSalePhnNum', {
-          params: {
-            owner: this.selectedOwner, // 传递当前选择的所有者
-            startDate: this.startDate,
-            endDate: this.endDate
+        const token = localStorage.getItem('token');
+        const response = await axios.post('http://localhost:8081/markSettlementCompleted', {
+          owner: this.selectedOwner
+        }, {
+          headers: {
+            token: `${token}`
           }
         });
-        this.salePhnNums = response.data.salePhnNums;
-        this.exchangeRate = parseFloat(response.data.exchangeRate); // 更新汇率
+
+        if (response.data.code === 1) {
+          alert('Settlement Completed.');
+          // Fetch data again after update
+          this.fetchSalePhnNums();
+        } else {
+          alert('Failed to mark settlement as completed.');
+        }
       } catch (error) {
-        console.error('Error fetching sale phone numbers:', error);
+        console.error('Error marking settlement completed:', error);
+        alert('An error occurred while marking settlement as completed.');
+      }
+    },
+
+    async fetchSalePhnNums() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:8081/getBankAccount', {
+          params: {
+            owner: this.selectedOwner,
+            startDate: this.startDate,
+            endDate: this.endDate
+          },
+          headers: {
+            token: `${token}` // 添加 token 作为 Authorization header
+          }
+        });
+
+        // 更新数据
+        this.salePhnNums = response.data.bankAccount; // 从新的接口字段中提取数据
+        this.exchangeRate = parseFloat(response.data.exchangeRate);
+        this.settlementRate = parseFloat(response.data.settlementRate) / 100;
+
+        // 提取唯一所有者
+        const uniqueOwners = [...new Set(this.salePhnNums.map(item => item.rgst_nm))];
+        this.owners = uniqueOwners.sort(); // 排序，如果需要
+
+        // 如果没有选择所有者，则设置为空字符串（表示“所有”）
+        if (!this.selectedOwner) {
+          this.selectedOwner = '';
+        }
+      } catch (error) {
+        console.error('Error fetching bank accounts:', error);
       }
     },
 
     resetFilters() {
-      this.selectedOwner = 'John'; // 重置为默认选择“ALL”
+      this.selectedOwner = ''; // Reset to empty to show "ALL"
       this.startDate = '';
       this.endDate = '';
       this.currentPage = 1;
-      // 重置后重新获取数据
+      // Fetch data again after reset
       this.fetchSalePhnNums();
     },
 
@@ -219,5 +262,5 @@ export default {
 </script>
 
 <style scoped>
-/* ... 样式代码保持不变 ... */
+/* Add your styles here */
 </style>

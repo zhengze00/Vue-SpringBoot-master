@@ -1,5 +1,5 @@
 <template>
-  <PageHeader/>
+  <PageHeader />
   <div class="wrap">
     <!-- container : S -->
     <div class="container">
@@ -10,12 +10,12 @@
             <router-link to="/seller" class="active">SELLER</router-link>
             <ul class="lnb-menu-sub" style="display: block">
               <li><a class="active">Manage Phone Number</a></li>
+              <li><router-link to="/seller/scsc">Sales Commission Settlement Completed</router-link></li>
             </ul>
           </li>
           <li class="sub">
             <a href="/admin/scs">ADMIN</a>
-            <ul class="lnb-menu-sub">
-            </ul>
+            <ul class="lnb-menu-sub"></ul>
           </li>
         </ul>
       </aside>
@@ -42,40 +42,7 @@
                 <strong>Category:</strong>
                 <span class="input-style">
                   <select v-model="category">
-                    <option>ALL</option>
-                    <option>0.1.2.3 SERIES</option>
-                    <option>0.1.9 SERIES</option>
-                    <option>1314 SERIES</option>
-                    <option>520 SERIES</option>
-                    <option>AAA SERIES</option>
-                    <option>AAAA SERIES</option>
-                    <option>AAAAA SERIES</option>
-                    <option>AAAAAA SERIES</option>
-                    <option>AAAB SERIES</option>
-                    <option>AABA SERIES</option>
-                    <option>AABAA SERIES</option>
-                    <option>AABB SERIES</option>
-                    <option>AABBCC SERIES</option>
-                    <option>AABBCCDD SERIES</option>
-                    <option>AB SERIES</option>
-                    <option>ABAA SERIES</option>
-                    <option>ABAA/AABA SERIES</option>
-                    <option>ABAB SERIES</option>
-                    <option>ABABAB SERIES</option>
-                    <option>ABBA SERIES</option>
-                    <option>ABBB SERIES</option>
-                    <option>BOSS SERIES</option>
-                    <option>FENGSHUI 1349 SERIES</option>
-                    <option>FENGSHUI 2678 SERIES</option>
-                    <option>ICHING SERIES</option>
-                    <option>LADDER SERIES</option>
-                    <option>MATAFIZIK SERIES</option>
-                    <option>NORMAL SERIES</option>
-                    <option>ONG 88 SERIES</option>
-                    <option>OTHER SERIES</option>
-                    <option>REPEAT SERIES</option>
-                    <option>THOUSAND NUMBER SERIES</option>
-                    <option>YEAR SERIES</option>
+                    <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
                   </select>
                 </span>
               </li>
@@ -92,24 +59,21 @@
                 </span>
               </li>
             </ul>
-
             <div class="search-btn">
               <button type="button" @click="search">Search</button>
               <button type="button" class="type2" @click="reset">Reset</button>
             </div>
-
             <div id="app">
               <div class="btn-area">
                 <div class="search-btn">
                   <button type="button" class="type3" @click="showModal = true">Upload Phone Number</button>
                 </div>
               </div>
-
               <div class="modal" :class="{ show: showModal }" @click.self="showModal = false">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h2>Upload Phone Number</h2>
-                    <span class="close-btn" @click="showModal = false">&times;</span>
+                    <span class="close-btn" @click="showModal = false">×</span>
                   </div>
                   <div class="modal-body">
                     <div class="modal-section">
@@ -121,12 +85,19 @@
                       <p>Upload Date:</p>
                     </div>
                     <div class="modal-section">
-                      <input v-model="form.prefixNumber" placeholder="Prefix Number" />
-                      <input v-model="form.category" placeholder="Category" />
-                      <input v-model="form.phoneNumber" placeholder="Phone Number" />
-                      <input v-model="form.price" placeholder="Price(MYR/RM)" />
-                      <input v-model="form.status" placeholder="Status" />
-                      <input v-model="form.uploadDate" placeholder="Upload Date" />
+                      <select v-model="form.prefixNumber">
+                        <option v-for="prefix in prefixNumbers" :key="prefix" :value="prefix">{{ prefix }}</option>
+                      </select>
+                      <select v-model="form.category">
+                        <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
+                      </select>
+                      <input v-model="form.phoneNumber" placeholder=""/>
+                      <input v-model="form.price" placeholder="" />
+                      <select v-model="form.status">
+                        <option value="Selling">Selling</option>
+                        <option value="SoldOut">SoldOut</option>
+                      </select>
+                      <input type="date" v-model="form.uploadDate" />
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -136,10 +107,8 @@
                 </div>
               </div>
             </div>
-
           </div>
           <!-- //search-area -->
-
           <table class="table-style t-center list">
             <thead>
             <tr>
@@ -155,12 +124,11 @@
               <th>OPERATION</th>
             </tr>
             </thead>
-
             <tbody>
             <tr v-for="salePhnNum in paginatedPhnNums" :key="salePhnNum.sale_id">
               <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
               <td>{{ salePhnNum.sale_ctgr_cd }}</td>
-              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px;">
                 {{ salePhnNum.sale_phn_num }}
               </td>
               <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
@@ -171,13 +139,15 @@
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
               <td>{{ salePhnNum.sale_contact }}</td>
-              <td></td>
+              <td>
+                <span class="operation" @click="editRecord(salePhnNum)">Edit</span>
+                <span class="separator">|</span>
+                <span class="operation" @click="confirmDelete(salePhnNum.sale_id)">Delete</span>
+              </td>
             </tr>
             </tbody>
-
           </table>
           <!-- //table-style -->
-
           <div class="pageing">
             <a class="first" @click="goToPage(1)" :class="{ disabled: currentPage === 1 }"></a>
             <a class="pre" @click="goToPage(currentPage - 1)" :class="{ disabled: currentPage === 1 }"></a>
@@ -185,13 +155,70 @@
             <a class="next" @click="goToPage(currentPage + 1)" :class="{ disabled: currentPage === totalPages }"></a>
             <a class="last" @click="goToPage(totalPages)" :class="{ disabled: currentPage === totalPages }"></a>
           </div>
-
+          <!-- Edit Modal -->
+          <div class="modal" :class="{ show: showEditModal }" @click.self="showEditModal = false">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2>Edit Phone Number</h2>
+                <span class="close-btn" @click="showEditModal = false">×</span>
+              </div>
+              <div class="modal-body">
+                <div class="modal-section">
+                  <p>Prefix Number:</p>
+                  <p>Category:</p>
+                  <p>Phone Number:</p>
+                  <p>Price(MYR/RM):</p>
+                  <p>Status:</p>
+                  <p>Upload Date:</p>
+                </div>
+                <div class="modal-section">
+                  <select v-model="editForm.prefixNumber">
+                    <option v-for="prefix in prefixNumbers" :key="prefix" :value="prefix">{{ prefix }}</option>
+                  </select>
+                  <select v-model="editForm.category">
+                    <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
+                  </select>
+                  <input v-model="editForm.phoneNumber" placeholder="" />
+                  <input v-model="editForm.price" placeholder="" />
+                  <select v-model="editForm.status">
+                    <option value="Selling">Selling</option>
+                    <option value="SoldOut">SoldOut</option>
+                  </select>
+                  <input type="date" v-model="editForm.uploadDate" />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" @click="updateData">Update</button>
+                <button type="button" @click="showEditModal = false">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <!-- Delete Confirmation Modal -->
+          <div class="modal" :class="{ show: showDeleteConfirm }" @click.self="showDeleteConfirm = false">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2>Confirm Deletion</h2>
+                <span class="close-btn" @click="showDeleteConfirm = false">×</span>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to delete this data?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" @click="deleteData">Yes</button>
+                <button type="button" @click="showDeleteConfirm = false">Cancel</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <!-- //content -->
     </div>
+    <!-- //container -->
   </div>
-  <PageFooter/>
+  <PageFooter />
 </template>
+
+
 
 <script>
 import PageHeader from '@/components/PageHeader';
@@ -203,6 +230,8 @@ export default {
     return {
       exchangeRate: 1,
       showModal: false,
+      showEditModal: false,
+      showDeleteConfirm: false,
       phoneNumber: '',
       category: '',
       priceMin: '',
@@ -210,42 +239,54 @@ export default {
       salePhnNums: [],
       filteredPhnNums: [],
       form: {
-        prefixNumber: '',
+        prefixNumber: '', // 默认选择010
         category: '',
         phoneNumber: '',
         price: '',
-        status: '',
-        uploadDate: ''
+        status: '', // 默认状态
+        uploadDate: new Date().toISOString().substr(0, 10) // 默认当天日期
+      },
+      editForm: {
+        prefixNumber: '', // 默认选择010
+        category: '',
+        phoneNumber: '',
+        price: '',
+        status: '', // 默认状态
+        uploadDate: new Date().toISOString().substr(0, 10) // 默认当天日期
       },
       currentPage: 1,
-      itemsPerPage: 20 // 每页显示20条记录
+      itemsPerPage: 20, // 每页显示20条记录
+      recordToDelete: null, // 记录要删除的ID
+      prefixNumbers: ['010', '011', '012', '013', '014', '015', '016', '017', '018', '019'], // 从010到019的选择
+      categories: [ '0.1.2.3 SERIES', '0.1.9 SERIES', '1314 SERIES', '520 SERIES', 'AAA SERIES', 'AAAA SERIES', 'AAAAA SERIES', 'AAAAAA SERIES', 'AAAB SERIES', 'AABA SERIES', 'AABAA SERIES', 'AABB SERIES', 'AABBCC SERIES', 'AABBCCDD SERIES', 'AB SERIES', 'ABAA SERIES', 'ABAA/AABA SERIES', 'ABAB SERIES', 'ABABAB SERIES', 'ABBA SERIES', 'ABBB SERIES', 'BOSS SERIES', 'FENGSHUI 1349 SERIES', 'FENGSHUI 2678 SERIES', 'ICHING SERIES', 'LADDER SERIES', 'MATAFIZIK SERIES', 'NORMAL SERIES', 'ONG 88 SERIES', 'OTHER SERIES', 'REPEAT SERIES', 'THOUSAND NUMBER SERIES', 'YEAR SERIES'], // 类别选项
     };
   },
-
   components: {
     PageHeader,
     PageFooter
   },
-
   created() {
     this.fetchSalePhnNums();
   },
-
   methods: {
     async fetchSalePhnNums() {
       try {
         const response = await axios.get('http://localhost:8081/getSalePhnNum');
-        this.salePhnNums = response.data.salePhnNums;
+        this.salePhnNums = response.data.salePhnNums.filter(phnNum => ['SoldOut', 'Selling'].includes(phnNum.sale_status_cd)); // 过滤状态
         this.exchangeRate = parseFloat(response.data.exchangeRate); // 获取汇率
         this.filteredPhnNums = this.salePhnNums; // 初始化过滤后的数据
       } catch (error) {
         console.error('Error fetching components:', error);
       }
     },
-
+    formatPhoneNumber() {
+      const rawNumber = this.form.phoneNumber.replace(/-/g, '');
+      if (rawNumber.length === 11) {
+        this.form.phoneNumber = `${rawNumber.slice(0, 3)}-${rawNumber.slice(3, 7)}-${rawNumber.slice(7)}`;
+      }
+    },
     search() {
       const formattedPhoneNumber = this.phoneNumber.replace(/-/g, '');
-
       this.filteredPhnNums = this.salePhnNums.filter(phnNum => {
         const formattedSalePhnNum = phnNum.sale_phn_num.replace(/-/g, '');
         const matchesPhoneNumber = !formattedPhoneNumber || formattedSalePhnNum.includes(formattedPhoneNumber);
@@ -253,16 +294,13 @@ export default {
         const priceMinNum = parseFloat(this.priceMin);
         const priceMaxNum = parseFloat(this.priceMax);
         const salePriceNum = parseFloat(phnNum.sale_price);
-
         const matchesPriceMin = isNaN(priceMinNum) || salePriceNum >= priceMinNum;
         const matchesPriceMax = isNaN(priceMaxNum) || salePriceNum <= priceMaxNum;
-
-        return matchesPhoneNumber && matchesCategory && matchesPriceMin && matchesPriceMax;
+        const matchesStatus = ['Selling', 'SoldOut'].includes(phnNum.sale_status_cd); // 只匹配 Selling 或 SoldOut
+        return matchesPhoneNumber && matchesCategory && matchesPriceMin && matchesPriceMax && matchesStatus;
       });
-
-      this.currentPage = 1; // 重置到第一页
+      this.currentPage = 1;  // 重置到第一页
     },
-
     reset() {
       this.phoneNumber = '';
       this.category = '';
@@ -271,15 +309,12 @@ export default {
       this.filteredPhnNums = this.salePhnNums;
       this.currentPage = 1; // 重置到第一页
     },
-
     submitForm() {
       if (Object.values(this.form).some(value => value === '')) {
         alert('Please fill in all fields.');
         return;
       }
-
       const token = localStorage.getItem('token');
-
       axios.post('http://localhost:8081/upload_phone', {
         sale_phn_pfx_cd: this.form.prefixNumber,
         sale_ctgr_cd: this.form.category,
@@ -287,35 +322,98 @@ export default {
         sale_price: this.form.price,
         sale_status_cd: this.form.status,
         rgst_dt: this.form.uploadDate
-      },{
+      }, {
         headers: {
           token: `${token}`
-        }})
+        }
+      })
           .then(() => {
-            alert('Data submitted successfully!');
+            alert('Phone number upload successfully!');
             this.showModal = false;
             this.form = {
-              prefixNumber: '',
+              prefixNumber: '', // 重置为默认值
               category: '',
               phoneNumber: '',
               price: '',
-              status: '',
-              uploadDate: ''
+              status: '', // 重置为默认状态
+              uploadDate: new Date().toISOString().substr(0, 10) // 重置为当天日期
             };
+            this.fetchSalePhnNums(); // 刷新数据
           })
           .catch(error => {
             console.error('Error submitting form:', error);
             alert('Error submitting data.');
           });
     },
+    editRecord(record) {
+      this.editForm = {
+        prefixNumber: record.sale_phn_pfx_cd,
+        category: record.sale_ctgr_cd,
+        phoneNumber: record.sale_phn_num,
+        price: record.sale_price,
+        status: record.sale_status_cd,
+        uploadDate: record.rgst_dt
+      };
+      this.showEditModal = true;
+    },
+    updateData() {
+      const token = localStorage.getItem('token');
+      axios.post('http://localhost:8081/update_phone', {
+        sale_phn_pfx_cd: this.editForm.prefixNumber,
+        sale_ctgr_cd: this.editForm.category,
+        sale_phn_num: this.editForm.phoneNumber,
+        sale_price: this.editForm.price,
+        sale_status_cd: this.editForm.status,
+        rgst_dt: this.editForm.uploadDate,
+      }, {
+        headers: {
+          token: `${token}`
+        }
+      })
+          .then(() => {
+            alert('Data updated successfully!');
+            this.showEditModal = false;
+            this.editForm = {
+              prefixNumber: '', // 重置为默认值
+              category: '',
+              phoneNumber: '',
+              price: '',
+              status: '', // 重置为默认状态
+              uploadDate: new Date().toISOString().substr(0, 10) // 重置为当天日期
+            };
+            this.fetchSalePhnNums(); // 刷新数据
+          })
+          .catch(error => {
+            console.error('Error updating data:', error);
+            alert('Error updating data.');
+          });
+    },
+    confirmDelete(id) {
+      this.recordToDelete = parseInt(id, 10); // 确保 ID 是整数
+      this.showDeleteConfirm = true;
+    },
 
+    async deleteData() {
+      if (this.recordToDelete) {
+        try {
+          const token = localStorage.getItem('token');
+          await axios.post('http://localhost:8081/delete_phone', { sale_id: this.recordToDelete }, {
+            headers: { token: `${token}` }
+          });
+          this.fetchSalePhnNums(); // 刷新数据
+          this.showDeleteConfirm = false; // 关闭确认对话框
+        } catch (error) {
+          console.error('Error deleting data:', error);
+          alert('Error deleting data.');
+            }
+      }
+    },
     goToPage(page) {
       if (page >= 1 && page <= this.totalPages) {
         this.currentPage = page;
       }
     }
   },
-
   computed: {
     totalPages() {
       return Math.ceil(this.filteredPhnNums.length / this.itemsPerPage);
@@ -326,7 +424,6 @@ export default {
       return this.filteredPhnNums.slice(start, end);
     }
   },
-
   watch: {
     phoneNumber: 'search',
     category: 'search',
@@ -336,9 +433,9 @@ export default {
 };
 </script>
 
+
 <style scoped>
 @import "@/assets/common_new.css";
 @import "@/assets/reset.css";
-
 /* Add any additional styles here */
 </style>

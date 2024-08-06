@@ -1,6 +1,5 @@
 <template>
   <div class="wrap">
-    <!-- header : S -->
     <header class="header">
       <div class="inner">
         <h1 class="logo">
@@ -15,7 +14,7 @@
               <ul class="sub_menu">
                 <li @click="showModal = true">Personal Data</li>
                 <li @click="showModal1 = true">Change Password</li>
-                <li @click="logout">Logout                </li>
+                <li @click="logout">Logout</li>
               </ul>
             </li>
           </ul>
@@ -37,17 +36,15 @@
             <p>Bank Account:</p>
           </div>
           <div class="modal-section">
+            <input v-model="userData.user_nm" type="text" class="input-gray" />
+            <input v-model="userData.user_contact" type="text" class="input-gray" />
             <input v-model="userData.rgst_nm" type="text" class="input-gray" />
-            <input v-model="userData.sale_contact" type="text" class="input-gray" />
-            <input v-model="userData.rgst_nm" type="text" class="input-gray" />
-            <input v-model="userBankAcc" type="text" class="input-gray" />
+            <input v-model="userData.user_bank_acc" type="text" class="input-gray" />
           </div>
         </div>
-        <div id="app">
-          <div class="btn-area">
-            <a class="close-btn" @click="showModal = false">Cancel</a>
-            <a class="next" @click="submitData">Submit</a>
-          </div>
+        <div class="btn-area">
+          <a class="close-btn" @click="showModal = false">Cancel</a>
+          <a class="next" @click="submitData">Submit</a>
         </div>
       </div>
     </div>
@@ -65,16 +62,14 @@
             <p>Confirm New Password:</p>
           </div>
           <div class="modal-section">
-            <input v-model="userData.rgst_nm" type="text" class="input-gray" />
-            <input v-model="userData.sale_contact" type="text" class="input-gray" />
-            <input v-model="userData.rgst_nm" type="text" class="input-gray" />
+            <input v-model="passwordData.currentPassword" type="password" class="input-gray" />
+            <input v-model="passwordData.newPassword" type="password" class="input-gray" />
+            <input v-model="passwordData.confirmNewPassword" type="password" class="input-gray" />
           </div>
         </div>
-        <div id="app">
-          <div class="btn-area">
-            <a class="close-btn" @click="showModal1 = false">Cancel</a>
-            <a class="next" @click="submitData">Submit</a>
-          </div>
+        <div class="btn-area">
+          <a class="close-btn" @click="showModal1 = false">Cancel</a>
+          <a class="next" @click="changePassword">Submit</a>
         </div>
       </div>
     </div>
@@ -90,14 +85,16 @@ export default {
       showModal: false,
       showModal1: false,
       userData: {
+        user_nm: '',
+        user_contact: '',
         rgst_nm: '',
-        sale_contact: ''
+        user_bank_acc: ''
       },
-      userBankAcc: '',
-      username: '',
-      contactNumber: '',
-      ownerName: '',
-      bankAccount: ''
+      passwordData: {
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: ''
+      }
     };
   },
 
@@ -108,28 +105,61 @@ export default {
   methods: {
     async fetchUserData() {
       try {
-        const response = await axios.get('http://localhost:8081/getUserData');
-        this.userData = response.data.glvs_sale_phn_num; // 根据实际数据结构调整
-        this.userBankAcc = response.data.glvs_user.user_bank_acc;
+        const token = localStorage.getItem('token'); // 假设 token 存储在 localStorage 中
+        const response = await axios.get('http://localhost:8081/getUserData', {
+          params: { user_nm: localStorage.getItem('user_nm') },
+          headers: {
+            'Authorization': `Bearer ${token}` // 如果 token 是作为 Bearer token 发送的
+          }
+        });
+        if (response.data && response.data.data) {
+          this.userData = response.data.data;
+        } else {
+          console.error('Unexpected API response format:', response.data);
+        }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     },
 
     async submitData() {
+      console.log('Submit button clicked');
       try {
-        const payload = {
-          rgst_nm: this.username,
-          sale_contact: this.contactNumber,
-          owner_name: this.ownerName,
-          user_bank_acc: this.bankAccount
-        };
-        await axios.post('http://localhost:8081/updateUserData', payload);
-        this.showModal = false;
-        this.showModal1 = false;
-        alert('Data updated successfully!');
+        const token = localStorage.getItem('token'); // 假设 token 存储在 localStorage 中
+        const response = await axios.post('http://localhost:8081/updateUserData', this.userData, {
+          headers: {
+            'Authorization': `Bearer ${token}` // 如果 token 是作为 Bearer token 发送的
+          }
+        });
+        console.log('API response:', response.data);
+        if (response.data.success) {
+          this.showModal = false;
+          alert('Data updated successfully!');
+        } else {
+          alert('Failed to update data.');
+        }
       } catch (error) {
         console.error('Error updating user data:', error);
+      }
+    },
+
+    async changePassword() {
+      if (this.passwordData.newPassword !== this.passwordData.confirmNewPassword) {
+        alert('New passwords do not match!');
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('token'); // 假设 token 存储在 localStorage 中
+        await axios.post('http://localhost:8081/changePassword', this.passwordData, {
+          headers: {
+            'Authorization': `Bearer ${token}` // 如果 token 是作为 Bearer token 发送的
+          }
+        });
+        this.showModal1 = false;
+        alert('Password changed successfully!');
+      } catch (error) {
+        console.error('Error changing password:', error);
       }
     },
 
@@ -140,4 +170,6 @@ export default {
 };
 </script>
 
-
+<style scoped>
+/* 你的样式 */
+</style>

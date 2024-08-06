@@ -38,40 +38,40 @@
                   <span class="input-style">
                     <select v-model="category">
                       <option>ALL</option>
-                     <option>0.1.2.3 SERIES</option>
-                                          <option>0.1.9 SERIES</option>
-                                          <option>1314 SERIES</option>
-                                          <option>520 SERIES</option>
-                                          <option>AAA SERIES</option>
-                                          <option>AAAA SERIES</option>
-                                          <option>AAAAA SERIES</option>
-                                          <option>AAAAAA SERIES</option>
-                                          <option>AAAB SERIES</option>
-                                          <option>AABA SERIES</option>
-                                          <option>AABAA SERIES</option>
-                                          <option>AABB SERIES</option>
-                                          <option>AABBCC SERIES</option>
-                                          <option>AABBCCDD SERIES</option>
-                                          <option>AB SERIES</option>
-                                          <option>ABAA SERIES</option>
-                                          <option>ABAA/AABA SERIES</option>
-                                          <option>ABAB SERIES</option>
-                                          <option>ABABAB SERIES</option>
-                                          <option>ABBA SERIES</option>
-                                          <option>ABBB SERIES</option>
-                                          <option>BOSS SERIES</option>
-                                          <option>FENGSHUI 1349 SERIES</option>
-                                          <option>FENGSHUI 2678 SERIES</option>
-                                          <option>ICHING SERIES</option>
-                                          <option>LADDER SERIES</option>
-                                          <option>MATAFIZIK SERIES</option>
-                                          <option>NORMAL SERIES</option>
-                                          <option>ONG 88 SERIES</option>
-                                          <option>OTHER SERIES</option>
-                                          <option>REPEAT SERIES</option>
-                                          <option>THOUSAND NUMBER SERIES</option>
-                                          <option>YEAR SERIES</option>
-                                        </select>
+                      <option>0.1.2.3 SERIES</option>
+                      <option>0.1.9 SERIES</option>
+                      <option>1314 SERIES</option>
+                      <option>520 SERIES</option>
+                      <option>AAA SERIES</option>
+                      <option>AAAA SERIES</option>
+                      <option>AAAAA SERIES</option>
+                      <option>AAAAAA SERIES</option>
+                      <option>AAAB SERIES</option>
+                      <option>AABA SERIES</option>
+                      <option>AABAA SERIES</option>
+                      <option>AABB SERIES</option>
+                      <option>AABBCC SERIES</option>
+                      <option>AABBCCDD SERIES</option>
+                      <option>AB SERIES</option>
+                      <option>ABAA SERIES</option>
+                      <option>ABAA/AABA SERIES</option>
+                      <option>ABAB SERIES</option>
+                      <option>ABABAB SERIES</option>
+                      <option>ABBA SERIES</option>
+                      <option>ABBB SERIES</option>
+                      <option>BOSS SERIES</option>
+                      <option>FENGSHUI 1349 SERIES</option>
+                      <option>FENGSHUI 2678 SERIES</option>
+                      <option>ICHING SERIES</option>
+                      <option>LADDER SERIES</option>
+                      <option>MATAFIZIK SERIES</option>
+                      <option>NORMAL SERIES</option>
+                      <option>ONG 88 SERIES</option>
+                      <option>OTHER SERIES</option>
+                      <option>REPEAT SERIES</option>
+                      <option>THOUSAND NUMBER SERIES</option>
+                      <option>YEAR SERIES</option>
+                    </select>
                   </span>
                 </li>
                 <li class="fix">
@@ -95,36 +95,36 @@
               </div>
             </div>
           </div>
-            <table class="table-style t-center list">
-              <thead>
-              <tr>
-                <th >PREFIX NUMBER</th>
-                <th >CATEGORY</th>
-                <th >PHONE NUMBER</th>
-                <th >PRICE <br>(MYR/RM)</th>
-                <th >PRICE <br>(KRW/WON)</th>
-                <th >STATUS</th>
-                <th >UPLOAD DATE</th>
-                <th >OWNER</th>
-                <th >↓CONTACT NUMBER↓<br>(WhatsApp)</th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-for="salePhnNum in paginatedPhnNums" :key="salePhnNum.sale_id">
-                <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
-                <td>{{ salePhnNum.sale_ctgr_cd }}</td>
-                <td style="font-weight: 900; padding: 0.5em; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                  {{ salePhnNum.sale_phn_num }}
-                </td>
-                <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
-                <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
-                <td>{{ salePhnNum.sale_status_cd }}</td>
-                <td>{{ salePhnNum.rgst_dt }}</td>
-                <td>{{ salePhnNum.rgst_nm }}</td>
-                <td>{{ salePhnNum.sale_contact }}</td>
-              </tr>
-              </tbody>
-            </table>
+          <table class="table-style t-center list">
+            <thead>
+            <tr>
+              <th >PREFIX NUMBER</th>
+              <th >CATEGORY</th>
+              <th >PHONE NUMBER</th>
+              <th >PRICE <br>(MYR/RM)</th>
+              <th >PRICE <br>(KRW/WON)</th>
+              <th >STATUS</th>
+              <th >UPLOAD DATE</th>
+              <th >OWNER</th>
+              <th >↓CONTACT NUMBER↓<br>(WhatsApp)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="salePhnNum in paginatedPhnNums" :key="salePhnNum.sale_id">
+              <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
+              <td>{{ salePhnNum.sale_ctgr_cd }}</td>
+              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px; ">
+                {{ salePhnNum.sale_phn_num }}
+              </td>
+              <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
+              <td>{{ salePhnNum.sale_status_cd }}</td>
+              <td>{{ salePhnNum.rgst_dt }}</td>
+              <td>{{ salePhnNum.rgst_nm }}</td>
+              <td>{{ salePhnNum.sale_contact }}</td>
+            </tr>
+            </tbody>
+          </table>
 
           <div class="pageing">
             <a class="first" @click="goToPage(1)" :class="{ disabled: currentPage === 1 }"></a>
@@ -135,14 +135,14 @@
           </div>
           <div id="app">
             <div class="btn-area">
-              <a @click="showModal = true">Sales Status</a>
+              <a @click="openModal">Sales Status</a>
               <router-link to="/account/login" class="next">Agent Login</router-link>
             </div>
-            <div class="modal" :class="{ show: showModal }" @click.self="showModal = false">
+            <div class="modal" :class="{ show: showModal }" @click.self="closeModal">
               <div class="modal-content">
                 <div class="modal-header">
                   <h2>Sales Status of Each Prefix Number</h2>
-                  <span class="close-btn" @click="showModal = false">&times;</span>
+                  <span class="close-btn" @click="closeModal">&times;</span>
                 </div>
                 <table>
                   <thead>
@@ -152,7 +152,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr v-for="item in soldCountByPrefix" :key="item.phonePrefix">
+                  <tr v-for="item in sortedSoldCountByPrefix" :key="item.phonePrefix">
                     <td>{{ item.phone_prefix }}</td>
                     <td>{{ item.sold_count }}</td>
                   </tr>
@@ -167,6 +167,7 @@
     <PageFooter/>
   </div>
 </template>
+
 <script>
 import PageHeader2 from '@/components/PageHeader2';
 import PageFooter from '@/components/PageFooter';
@@ -200,7 +201,7 @@ export default {
     async fetchSalePhnNums() {
       try {
         const response = await axios.get('http://localhost:8081/getSalePhnNum');
-        this.salePhnNums = response.data.salePhnNums;
+        this.salePhnNums = response.data.salePhnNums.filter(phnNum => ['Selling'].includes(phnNum.sale_status_cd)); // 过滤状态;
         this.exchangeRate = parseFloat(response.data.exchangeRate); // 获取汇率
         this.filteredPhnNums = this.salePhnNums; // 初始化过滤后的数据
       } catch (error) {
@@ -220,8 +221,8 @@ export default {
         const salePriceNum = parseFloat(phnNum.sale_price);
         const matchesPriceMin = isNaN(priceMinNum) || salePriceNum >= priceMinNum;
         const matchesPriceMax = isNaN(priceMaxNum) || salePriceNum <= priceMaxNum;
-
-        return matchesPhoneNumber && matchesCategory && matchesPriceMin && matchesPriceMax;
+        const matchesStatus = ['Selling'].includes(phnNum.sale_status_cd); // 只匹配 Selling
+        return matchesPhoneNumber && matchesCategory && matchesPriceMin && matchesPriceMax && matchesStatus;
       });
       this.currentPage = 1; // Reset to the first page
     },
@@ -241,6 +242,20 @@ export default {
         console.error('Error fetching sold count by prefix:', error);
       }
     },
+    openModal() {
+      this.showModal = true;
+      this.sortSoldCountByPrefix(); // Sort when opening modal
+    },
+    closeModal() {
+      this.showModal = false;
+    },
+    sortSoldCountByPrefix() {
+      this.soldCountByPrefix.sort((a, b) => {
+        if (a.phone_prefix < b.phone_prefix) return -1;
+        if (a.phone_prefix > b.phone_prefix) return 1;
+        return 0;
+      });
+    },
     goToPage(page) {
       if (page >= 1 && page <= this.totalPages) {
         this.currentPage = page;
@@ -255,6 +270,13 @@ export default {
     },
     totalPages() {
       return Math.ceil(this.filteredPhnNums.length / this.itemsPerPage);
+    },
+    sortedSoldCountByPrefix() {
+      return [...this.soldCountByPrefix].sort((a, b) => {
+        if (a.phone_prefix < b.phone_prefix) return -1;
+        if (a.phone_prefix > b.phone_prefix) return 1;
+        return 0;
+      });
     }
   },
   watch: {

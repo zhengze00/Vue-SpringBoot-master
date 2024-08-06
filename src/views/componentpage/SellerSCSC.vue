@@ -6,15 +6,16 @@
       <aside class="lnb">
         <h2 class="lnb-tit">MENU</h2>
         <ul class="lnb-menu">
-          <li class="sub">
-            <router-link to="/seller">SELLER</router-link>
-          </li>
           <li class="sub on">
-            <a class="active">ADMIN</a>
+            <router-link to="/seller" class="active">SELLER</router-link>
             <ul class="lnb-menu-sub" style="display: block">
-              <li><router-link to="/admin/scs">Sales Commission Settlement</router-link></li>
-              <li><a class="active">Sales Commission Settlement Completed</a></li>
+              <li><router-link to="/seller">Manage Phone Number</router-link></li>
+              <li><router-link to="/seller/scsc" class="active">Sales Commission Settlement Completed</router-link></li>
             </ul>
+          </li>
+          <li class="sub">
+            <a href="/admin/scs">ADMIN</a>
+            <ul class="lnb-menu-sub"></ul>
           </li>
         </ul>
       </aside>
@@ -34,17 +35,9 @@
               <li class="fix">
                 <strong>Owner:</strong>
                 <span class="input-style">
-                  <select v-model="selectedOwner" @change="fetchSalePhnNums">
+                  <select v-model="selectedOwner">
                     <option value="">ALL</option>
-                    <option value="John">John</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="F">F</option>
-                    <option value="G">G</option>
-                    <option value="H">H</option>
+                    <option v-for="owner in owners" :key="owner" :value="owner">{{ owner }}</option>
                   </select>
                 </span>
               </li>
@@ -62,6 +55,8 @@
 
             <div class="search-btn">
               <button type="button" @click="fetchSalePhnNums">Search</button>
+            </div>
+              <div class="search-btn">
               <button type="button" class="type2" @click="resetFilters">Reset</button>
             </div>
           </div>
@@ -70,7 +65,7 @@
             <thead>
             <tr>
               <th>NO</th>
-              <th>PREFIX NUMBER</th>
+              <th>PREFIX <br>NUMBER</th>
               <th>CATEGORY</th>
               <th>PHONE NUMBER</th>
               <th>PRICE <br>(MYR/RM)</th>
@@ -80,7 +75,6 @@
               <th>OWNER COST <br>(KRW/WON)</th>
               <th>TRANSACTION DATE</th>
               <th>OWNER</th>
-              <th>BANK ACCOUNT</th>
             </tr>
             </thead>
             <tbody>
@@ -88,17 +82,22 @@
               <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
               <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
               <td>{{ salePhnNum.sale_ctgr_cd }}</td>
-              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px;">
                 {{ salePhnNum.sale_phn_num }}
               </td>
               <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
-              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
+              <td style="text-align: right;">
+                {{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}
+              </td>
               <td>{{ salePhnNum.sale_status_cd }}</td>
-              <td style="text-align: right;">{{ salePhnNum.owner_cost_myr }}</td>
-              <td style="text-align: right;">{{ (salePhnNum.owner_cost_myr * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
+              <td style="text-align: right;">
+                {{ (salePhnNum.sale_price * settlementRate).toFixed(0) }}
+              </td>
+              <td style="text-align: right;">
+                {{ (salePhnNum.sale_price * settlementRate * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}
+              </td>
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
-              <td>{{ salePhnNum.user_bank_acc }}</td>
             </tr>
             </tbody>
           </table>
@@ -131,11 +130,13 @@ export default {
     return {
       salePhnNums: [],
       exchangeRate: 1,
-      selectedOwner: 'John', // 默认选择
+      settlementRate: 1,
+      selectedOwner: '', // 默认选择
       startDate: '', // 绑定到开始日期输入框
       endDate: '', // 绑定到结束日期输入框
       currentPage: 1,
-      itemsPerPage: 20 // 每页显示20条记录
+      itemsPerPage: 20, // 每页显示20条记录
+      owners: [] // 添加 owners 数组
     };
   },
 
@@ -151,16 +152,11 @@ export default {
   computed: {
     filteredSalePhnNums() {
       return this.salePhnNums.filter(salePhnNum => {
-        // 过滤所有者
         const matchesOwner = !this.selectedOwner || salePhnNum.rgst_nm === this.selectedOwner;
-
-        // 过滤日期范围
         const saleDate = new Date(salePhnNum.rgst_dt);
         const startDate = this.startDate ? new Date(this.startDate) : new Date(-8640000000000000); // -Infinity
         const endDate = this.endDate ? new Date(this.endDate) : new Date(8640000000000000); // +Infinity
-
         const matchesDateRange = saleDate >= startDate && saleDate <= endDate;
-
         return matchesOwner && matchesDateRange;
       });
     },
@@ -174,35 +170,44 @@ export default {
     },
     totalOwnerPrice() {
       return this.filteredSalePhnNums.reduce((total, salePhnNum) => {
-        return total + parseFloat(salePhnNum.sale_price || 0);
-      }, 0);
+        return total + (salePhnNum.sale_price * this.settlementRate);
+      }, 0).toFixed(0);
     }
   },
 
   methods: {
     async fetchSalePhnNums() {
       try {
+        const token = localStorage.getItem('token');
         const response = await axios.get('http://localhost:8081/getSalePhnNum', {
           params: {
             owner: this.selectedOwner, // 传递当前选择的所有者
             startDate: this.startDate,
             endDate: this.endDate
+          },
+          headers: {
+            token: `${token}` // 更符合实际使用的 Authorization header 格式
           }
         });
-        this.salePhnNums = response.data.salePhnNums;
+
+        this.salePhnNums = response.data.salePhnNums.filter(phnNum => ['SettlementCompleted'].includes(phnNum.sale_status_cd)); // 过滤状态;
         this.exchangeRate = parseFloat(response.data.exchangeRate); // 更新汇率
+        this.settlementRate = parseFloat(response.data.settlementRate) / 100;
+
+        // 提取唯一所有者
+        const uniqueOwners = [...new Set(this.salePhnNums.map(item => item.rgst_nm))];
+        this.owners = uniqueOwners.sort(); // 排序，如果需要
       } catch (error) {
         console.error('Error fetching sale phone numbers:', error);
       }
     },
 
     resetFilters() {
-      this.selectedOwner = 'John'; // 重置为默认选择
+      this.selectedOwner = ''; // 重置为默认选择
       this.startDate = '';
       this.endDate = '';
       this.currentPage = 1;
-      // 重置后重新获取数据
-      this.fetchSalePhnNums();
+      this.fetchSalePhnNums(); // 重置过滤条件后重新获取数据
     },
 
     goToPage(page) {
@@ -215,5 +220,5 @@ export default {
 </script>
 
 <style scoped>
-/* ... 样式代码保持不变 ... */
+/* Your CSS styles */
 </style>
