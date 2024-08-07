@@ -47,7 +47,7 @@ export default {
           // 跳转到主页面
           this.$router.push('/seller');
         } else {
-          alert('Wrong username/password. Please type again');
+          alert('Wrong username or password. Please type again');
         }
       } catch (error) {
         console.error('Error during login:', error);

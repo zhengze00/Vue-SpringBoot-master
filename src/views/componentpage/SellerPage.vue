@@ -178,7 +178,7 @@
                   <select v-model="editForm.category">
                     <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
                   </select>
-                  <input v-model="editForm.phoneNumber" placeholder="" />
+                  <input v-model="editForm.phoneNumber" placeholder="" readonly />
                   <input v-model="editForm.price" placeholder="" />
                   <select v-model="editForm.status">
                     <option value="Selling">Selling</option>

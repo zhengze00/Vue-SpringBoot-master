@@ -8,7 +8,7 @@
           <li class="sub ">
             <router-link to="/seller">SELLER</router-link>
           </li>
-          <li class="sub">
+          <li class="sub on">
             <a href="/admin/scs"  class="active">ADMIN</a>
             <ul class="lnb-menu-sub" style="display: block">
               <li><a class="active">Sales Commission Settlement</a></li>
@@ -191,7 +191,7 @@ export default {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.post('http://localhost:8081/markSettlementCompleted', {
-          owner: this.selectedOwner
+          rgst_nm: this.selectedOwner
         }, {
           headers: {
             token: `${token}`
