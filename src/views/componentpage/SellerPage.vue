@@ -374,12 +374,12 @@ export default {
             alert('Data updated successfully!');
             this.showEditModal = false;
             this.editForm = {
-              prefixNumber: '', // 重置为默认值
+              prefixNumber: '',
               category: '',
               phoneNumber: '',
               price: '',
-              status: '', // 重置为默认状态
-              uploadDate: new Date().toISOString().substr(0, 10) // 重置为当天日期
+              status: '',
+              uploadDate: new Date().toISOString().substr(0, 10)
             };
             this.fetchSalePhnNums(); // 刷新数据
           })
