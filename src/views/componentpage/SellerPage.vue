@@ -14,7 +14,7 @@
             </ul>
           </li>
           <li class="sub">
-            <a href="/admin/scs">ADMIN</a>
+            <a href="#" @click.prevent="checkAdminAccess">ADMIN</a>
             <ul class="lnb-menu-sub"></ul>
           </li>
         </ul>
@@ -66,7 +66,7 @@
             <div id="app">
               <div class="btn-area">
                 <div class="search-btn">
-                  <button type="button" class="type3" @click="showModal = true">Upload Phone Number</button>
+                  <button type="button" class="type3 " @click="showModal = true">Upload Phone Number</button>
                 </div>
               </div>
               <div class="modal" :class="{ show: showModal }" @click.self="showModal = false">
@@ -178,7 +178,7 @@
                   <select v-model="editForm.category">
                     <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
                   </select>
-                  <input v-model="editForm.phoneNumber" placeholder="" readonly />
+                  <input v-model="editForm.phoneNumber" readonly placeholder="" />
                   <input v-model="editForm.price" placeholder="" />
                   <select v-model="editForm.status">
                     <option value="Selling">Selling</option>
@@ -238,6 +238,9 @@ export default {
       priceMax: '',
       salePhnNums: [],
       filteredPhnNums: [],
+      userId: '',
+      userTypCd: '',
+      rgstNm: '',
       form: {
         prefixNumber: '', // 默认选择010
         category: '',
@@ -266,12 +269,20 @@ export default {
     PageFooter
   },
   created() {
+    this.userId = localStorage.getItem('user_id');
+    this.userTypCd = localStorage.getItem('user_typ_cd');
+    this.rgstNm = localStorage.getItem('rgst_nm');
+
     this.fetchSalePhnNums();
   },
   methods: {
     async fetchSalePhnNums() {
       try {
-        const response = await axios.get('http://localhost:8081/getSalePhnNum');
+        const response = await axios.get('http://localhost:8081/getSalePhnNum', {
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        });
         this.salePhnNums = response.data.salePhnNums.filter(phnNum => ['SoldOut', 'Selling'].includes(phnNum.sale_status_cd)); // 过滤状态
         this.exchangeRate = parseFloat(response.data.exchangeRate); // 获取汇率
         this.filteredPhnNums = this.salePhnNums; // 初始化过滤后的数据
@@ -283,6 +294,15 @@ export default {
       const rawNumber = this.form.phoneNumber.replace(/-/g, '');
       if (rawNumber.length === 11) {
         this.form.phoneNumber = `${rawNumber.slice(0, 3)}-${rawNumber.slice(3, 7)}-${rawNumber.slice(7)}`;
+      }
+    },
+    checkAdminAccess() {
+      const userTypeCd = localStorage.getItem('user_typ_cd');
+
+      if (userTypeCd === 'U01') {
+        alert('You do not have permission to access ADMIN.');
+      } else {
+        this.$router.push('/admin/scs');  // 如果有权限，则跳转到 ADMIN 页面
       }
     },
     search() {
@@ -331,12 +351,12 @@ export default {
             alert('Phone number upload successfully!');
             this.showModal = false;
             this.form = {
-              prefixNumber: '', // 重置为默认值
+              prefixNumber: '',
               category: '',
               phoneNumber: '',
               price: '',
-              status: '', // 重置为默认状态
-              uploadDate: new Date().toISOString().substr(0, 10) // 重置为当天日期
+              status: '',
+              uploadDate: new Date().toISOString().substr(0, 10)
             };
             this.fetchSalePhnNums(); // 刷新数据
           })
@@ -374,12 +394,12 @@ export default {
             alert('Data updated successfully!');
             this.showEditModal = false;
             this.editForm = {
-              prefixNumber: '',
+              prefixNumber: '', // 重置为默认值
               category: '',
               phoneNumber: '',
               price: '',
-              status: '',
-              uploadDate: new Date().toISOString().substr(0, 10)
+              status: '', // 重置为默认状态
+              uploadDate: new Date().toISOString().substr(0, 10) // 重置为当天日期
             };
             this.fetchSalePhnNums(); // 刷新数据
           })

@@ -1,4 +1,4 @@
-﻿@charset "utf-8";
+﻿﻿@charset "utf-8";
 
 .wrap {
     min-width: 1608px;
@@ -218,7 +218,7 @@
     color: #285add;
 }
 .gnb-menu > li:hover span::after {
-/*    transform: scale(1);*/ /*蓝色下划线*/
+    /*    transform: scale(1);*/ /*蓝色下划线*/
     transform: scale(0);
 }
 
@@ -557,11 +557,16 @@
 .container {
     display: flex;
     align-items: stretch;
+    justify-content: space-evenly;
     justify-content: flex-start; /* 确保子元素不居中 */
     min-height: calc(100vh - 112px);
     width: 100%; /* 确保占满宽度 */
 }
 .content {
+    width: calc(100% - 220px);
+    box-sizing: border-box;
+    padding: 30px;
+    min-height: 700px;
     width: 1324px; /* 设置为固定宽度 */
     box-sizing: border-box; /* 包括内边距和边框在内的宽度计算 */
     padding: 30px; /* 内边距 */
@@ -570,11 +575,12 @@
     margin-right: 0; /* 确保没有水平居中 */
 }
 .template.min {
+    width: 1250px;
+    margin: 0 auto 0 5px;
     width: 100%; /* 确保模板宽度不超过内容宽度 */
     max-width: 1326px; /* 与内容宽度对齐 */
     margin: 0; /* 移除水平外边距 */
 }
-
 /* TITLE */
 .content-tit {
     display: flex;
@@ -699,7 +705,7 @@
     content: "";
     width: 0px;
     height: 0px;
-    border-top: 6px solid none;
+    border-top: 6px solid ;
     border-bottom: 6px solid #000;
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;

@@ -12,8 +12,8 @@
             <li>
               <span class="allmenu-btn">ALLMENU</span>
               <ul class="sub_menu">
-                <li @click="showModal = true">Personal Data</li>
-                <li @click="showModal1 = true">Change Password</li>
+                <li @click="openPersonalDataModal">Personal Data</li>
+                <li @click="openPersonalDataModal1 ">Change Password</li>
                 <li @click="logout">Logout</li>
               </ul>
             </li>
@@ -30,16 +30,16 @@
         </div>
         <div class="modal-body">
           <div class="modal-section">
+            <p>Owner Name:</p>
             <p>Username:</p>
             <p>(WhatsApp) Contact Number:</p>
-            <p>Owner Name:</p>
             <p>Bank Account:</p>
           </div>
           <div class="modal-section">
-            <input v-model="userData.user_nm" type="text" class="input-gray" />
-            <input v-model="userData.user_contact" type="text" class="input-gray" />
-            <input v-model="userData.rgst_nm" type="text" class="input-gray" />
-            <input v-model="userData.user_bank_acc" type="text" class="input-gray" />
+            <input v-model="updateForm.rgstName" readonly />
+            <input v-model="updateForm.userName" />
+            <input v-model="updateForm.userContact" />
+            <input v-model="updateForm.userBankAccount" />
           </div>
         </div>
         <div class="btn-area">
@@ -57,14 +57,18 @@
         </div>
         <div class="modal-body">
           <div class="modal-section">
+            <p>Owner Name:</p>
             <p>Current Password:</p>
             <p>New Password:</p>
+<!--
             <p>Confirm New Password:</p>
+-->
           </div>
           <div class="modal-section">
-            <input v-model="passwordData.currentPassword" type="password" class="input-gray" />
-            <input v-model="passwordData.newPassword" type="password" class="input-gray" />
-            <input v-model="passwordData.confirmNewPassword" type="password" class="input-gray" />
+            <input v-model="updateForm.rgstName" readonly />
+            <input v-model="updateForm1.currentPassword" type="password" class="input-gray" />
+            <input v-model="updateForm1.newPassword" type="password" class="input-gray" />
+<!--            <input v-model="updateForm1.confirmNewPassword" type="password" class="input-gray" />-->
           </div>
         </div>
         <div class="btn-area">
@@ -84,86 +88,85 @@ export default {
     return {
       showModal: false,
       showModal1: false,
-      userData: {
-        user_nm: '',
-        user_contact: '',
-        rgst_nm: '',
-        user_bank_acc: ''
-      },
-      passwordData: {
+      updateForm1: {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: ''
+      },
+      updateForm: {
+        userId: '',
+        userName: '',
+        userContact: '',
+        rgstName: '',
+        userBankAccount: ''
       }
     };
   },
-
-  async created() {
-    await this.fetchUserData();
-  },
-
   methods: {
-    async fetchUserData() {
-      try {
-        const token = localStorage.getItem('token'); // 假设 token 存储在 localStorage 中
-        const response = await axios.get('http://localhost:8081/getUserData', {
-          params: { user_nm: localStorage.getItem('user_nm') },
-          headers: {
-            'Authorization': `Bearer ${token}` // 如果 token 是作为 Bearer token 发送的
-          }
-        });
-        if (response.data && response.data.data) {
-          this.userData = response.data.data;
-        } else {
-          console.error('Unexpected API response format:', response.data);
+    openPersonalDataModal() {
+      this.showModal = true;
+      this.updateForm.rgstName = localStorage.getItem('rgst_nm') || '';
+    },
+    openPersonalDataModal1(){
+      this.showModal1 = true;
+      this.updateForm1.rgstName = localStorage.getItem('rgst_nm') || '';
+    },
+    submitData() {
+      const token = localStorage.getItem('token');
+      axios.post('http://localhost:8081/updateUserData', {
+        user_id: this.updateForm.userId,
+        user_nm: this.updateForm.userName,
+        user_contact: this.updateForm.userContact,
+        rgst_nm: this.updateForm.rgstName,
+        user_bank_acc: this.updateForm.userBankAccount,
+      }, {
+        headers: {
+          token: `${token}`
         }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
+      })
+          .then(() => {
+            alert('Data updated successfully!');
+            this.showModal = false;
+            this.updateForm = {
+              userId: '',
+              userName: '',
+              userContact: '',
+              rgstName: '',
+              userBankAccount: ''
+            };
+          })
+          .catch(error => {
+            console.error('Error submitting form:', error);
+            alert('Error submitting data.');
+          });
     },
-
-    async submitData() {
-      console.log('Submit button clicked');
-      try {
-        const token = localStorage.getItem('token'); // 假设 token 存储在 localStorage 中
-        const response = await axios.post('http://localhost:8081/updateUserData', this.userData, {
-          headers: {
-            'Authorization': `Bearer ${token}` // 如果 token 是作为 Bearer token 发送的
-          }
-        });
-        console.log('API response:', response.data);
-        if (response.data.success) {
-          this.showModal = false;
-          alert('Data updated successfully!');
-        } else {
-          alert('Failed to update data.');
+    changePassword() {
+      const token = localStorage.getItem('token');
+      axios.post('http://localhost:8081/changePassword', {
+        user_nm: this.updateForm.userName, // 确保发送用户名
+        user_pw: this.updateForm1.newPassword,
+        rgst_nm: this.updateForm1.rgstName
+      }, {
+        headers: {
+          token: `${token}`
         }
-      } catch (error) {
-        console.error('Error updating user data:', error);
-      }
+      })
+          .then(() => {
+            alert('Password changed successfully!');
+            this.showModal1 = false;
+            this.updateForm1 = {
+              currentPassword: '',
+              newPassword: '',
+              confirmNewPassword: ''
+            };
+          })
+          .catch(error => {
+            console.error('Error changing password:', error);
+            alert('Error changing password.');
+          });
     },
-
-    async changePassword() {
-      if (this.passwordData.newPassword !== this.passwordData.confirmNewPassword) {
-        alert('New passwords do not match!');
-        return;
-      }
-
-      try {
-        const token = localStorage.getItem('token'); // 假设 token 存储在 localStorage 中
-        await axios.post('http://localhost:8081/changePassword', this.passwordData, {
-          headers: {
-            'Authorization': `Bearer ${token}` // 如果 token 是作为 Bearer token 发送的
-          }
-        });
-        this.showModal1 = false;
-        alert('Password changed successfully!');
-      } catch (error) {
-        console.error('Error changing password:', error);
-      }
-    },
-
     logout() {
+      localStorage.clear();
       this.$router.push('/home');
     }
   }
@@ -171,5 +174,7 @@ export default {
 </script>
 
 <style scoped>
-/* 你的样式 */
+@import "@/assets/common_new.css";
+@import "@/assets/reset.css";
+/* Add any additional styles here */
 </style>

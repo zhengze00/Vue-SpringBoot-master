@@ -262,5 +262,7 @@ export default {
 </script>
 
 <style scoped>
-/* Add your styles here */
+@import "@/assets/common_new.css";
+@import "@/assets/reset.css";
+/* Add any additional styles here */
 </style>

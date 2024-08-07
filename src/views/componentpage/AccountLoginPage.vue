@@ -8,8 +8,20 @@
       </div>
       <div class="pop-body">
         <div class="input-group">
-          <input v-model="user_nm" type="text" class="pop-input" placeholder="Username: admin / seller">
-          <input v-model="user_pw" type="password" class="pop-input" placeholder="Password: 123456">
+          <input
+              v-model="user_nm"
+              type="text"
+              class="pop-input"
+              placeholder="Username: admin / seller"
+              @keyup.enter="handleLogin"
+          >
+          <input
+              v-model="user_pw"
+              type="password"
+              class="pop-input"
+              placeholder="Password: 123456"
+              @keyup.enter="handleLogin"
+          >
         </div>
         <div class="pop-btn-area">
           <router-link to="/home" class="pop-btn">Return</router-link>
@@ -25,7 +37,7 @@ import axios from 'axios';
 import PageHeader2 from "@/components/PageHeader2.vue";
 
 export default {
-  components: {PageHeader2},
+  components: { PageHeader2 },
   data() {
     return {
       user_nm: '',
@@ -42,8 +54,14 @@ export default {
         });
 
         if (response.data.code === 1) {
-          // 保存 JWT 和用户类型到本地存储
-          localStorage.setItem('token', response.data.data);
+          const userData = response.data.data;
+
+          // 保存 JWT 和用户信息到本地存储
+          localStorage.setItem('token', userData.token);
+          localStorage.setItem('user_id', userData.user_id);
+          localStorage.setItem('user_typ_cd', userData.user_typ_cd);
+          localStorage.setItem('rgst_nm', userData.rgst_nm);
+
           // 跳转到主页面
           this.$router.push('/seller');
         } else {
