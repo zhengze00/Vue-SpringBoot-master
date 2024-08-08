@@ -240,6 +240,9 @@ export default {
       userId: '',
       userTypCd: '',
       rgstNm: '',
+      userName: '',
+      userContact: '',
+      userBankAcc: '',
       form: {
         prefixNumber: '', // 默认选择010
         category: '',
@@ -271,7 +274,9 @@ export default {
     this.userId = localStorage.getItem('user_id');
     this.userTypCd = localStorage.getItem('user_typ_cd');
     this.rgstNm = localStorage.getItem('rgst_nm');
-
+    this.userName = localStorage.getItem('user_nm');
+    this.userContact = localStorage.getItem('user_contact');
+    this.userBankAcc = localStorage.getItem('user_bank_acc');
     this.fetchSalePhnNums();
   },
   methods: {

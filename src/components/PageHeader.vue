@@ -36,15 +36,15 @@
             <p>Bank Account:</p>
           </div>
           <div class="modal-section">
-            <input v-model="updateForm.rgstName" readonly />
-            <input v-model="updateForm.userName" />
-            <input v-model="updateForm.userContact" />
-            <input v-model="updateForm.userBankAccount" />
+            <input v-model="updateForm.rgstName" readonly @keyup.enter="submitData"/>
+            <input v-model="updateForm.userName" type="text" @keyup.enter="submitData" />
+            <input v-model="updateForm.userContact" type="text" @keyup.enter="submitData"/>
+            <input v-model="updateForm.userBankAcc" type="text" @keyup.enter="submitData"/>
           </div>
         </div>
         <div class="btn-area">
           <a class="close-btn" @click="showModal = false">Cancel</a>
-          <a class="next" @click="submitData">Submit</a>
+          <a class="next" @click="submitData" @keyup.enter="submitData">Submit</a>
         </div>
       </div>
     </div>
@@ -57,23 +57,15 @@
         </div>
         <div class="modal-body">
           <div class="modal-section">
-            <p>Owner Name:</p>
-            <p>Current Password:</p>
             <p>New Password:</p>
-            <!--
-                        <p>Confirm New Password:</p>
-            -->
           </div>
           <div class="modal-section">
-            <input v-model="updateForm1.rgstName" readonly />
-            <input v-model="updateForm1.currentPassword" type="password" class="input-gray" />
-            <input v-model="updateForm1.newPassword" type="password" class="input-gray" />
-            <!--            <input v-model="updateForm1.confirmNewPassword" type="password" class="input-gray" />-->
+            <input v-model="updateForm1.newPassword" type="password" class="input-gray" @keyup.enter="changePassword" />
           </div>
         </div>
         <div class="btn-area">
           <a class="close-btn" @click="showModal1 = false">Cancel</a>
-          <a class="next" @click="changePassword">Submit</a>
+          <a class="next" @click="changePassword" @keyup.enter="changePassword">Submit</a>
         </div>
       </div>
     </div>
@@ -89,40 +81,45 @@ export default {
       showModal: false,
       showModal1: false,
       updateForm1: {
-        currentPassword: '',
+        userPw: '',
         newPassword: '',
-        confirmNewPassword: ''
       },
       updateForm: {
         userId: '',
         userName: '',
         userContact: '',
         rgstName: '',
-        userBankAccount: ''
+        userBankAcc: ''
       }
     };
   },
   methods: {
     openPersonalDataModal() {
       this.showModal = true;
+
+      // 读取 localStorage 中的用户数据
       this.updateForm.rgstName = localStorage.getItem('rgst_nm') || '';
-      this.updateForm.userName = localStorage.getItem('userName') || ''; // Assuming you want to load additional data
-      this.updateForm.userContact = localStorage.getItem('userContact') || ''; // Assuming you want to load additional data
-      this.updateForm.userBankAccount = localStorage.getItem('userBankAccount') || ''; // Assuming you want to load additional data
+      this.updateForm.userName = localStorage.getItem('user_nm') || '';
+      this.updateForm.userContact = localStorage.getItem('user_contact') || '';
+      this.updateForm.userBankAcc = localStorage.getItem('user_bank_acc') || '';
     },
     openChangePasswordModal() {
       this.showModal1 = true;
       this.updateForm1.rgstName = localStorage.getItem('rgst_nm') || '';
-      // Optionally load additional data if needed
     },
     submitData() {
+      if (!this.updateForm.userName || !this.updateForm.userContact || !this.updateForm.userBankAcc) {
+        alert('All fields must be filled out!');
+        return;
+      }
+
       const token = localStorage.getItem('token');
       axios.post('http://localhost:8081/updateUserData', {
-        user_id: this.updateForm.userId,
+        user_id: localStorage.getItem('user_id'), // Ensure you have user_id in localStorage
         user_nm: this.updateForm.userName,
         user_contact: this.updateForm.userContact,
         rgst_nm: this.updateForm.rgstName,
-        user_bank_acc: this.updateForm.userBankAccount,
+        user_bank_acc: this.updateForm.userBankAcc,
       }, {
         headers: {
           token: `${token}`
@@ -131,13 +128,10 @@ export default {
           .then(() => {
             alert('Data updated successfully!');
             this.showModal = false;
-            this.updateForm = {
-              userId: '',
-              userName: '',
-              userContact: '',
-              rgstName: '',
-              userBankAccount: ''
-            };
+            // Optionally, update localStorage with the new values
+            localStorage.setItem('user_nm', this.updateForm.userName);
+            localStorage.setItem('user_contact', this.updateForm.userContact);
+            localStorage.setItem('user_bank_acc', this.updateForm.userBankAcc);
           })
           .catch(error => {
             console.error('Error submitting form:', error);
@@ -145,6 +139,11 @@ export default {
           });
     },
     changePassword() {
+      if (!this.updateForm1.newPassword) {
+        alert('New Password must be filled out!');
+        return;
+      }
+
       const token = localStorage.getItem('token');
       axios.post('http://localhost:8081/changePassword', {
         user_nm: this.updateForm.userName, // Ensure sending username if needed
