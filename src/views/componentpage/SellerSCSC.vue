@@ -14,7 +14,7 @@
             </ul>
           </li>
           <li class="sub">
-            <a href="/admin/scs">ADMIN</a>
+            <a href="#" @click.prevent="checkAdminAccess">ADMIN</a>
             <ul class="lnb-menu-sub"></ul>
           </li>
         </ul>
@@ -199,6 +199,16 @@ export default {
         this.owners = uniqueOwners.sort(); // 排序，如果需要
       } catch (error) {
         console.error('Error fetching sale phone numbers:', error);
+      }
+    },
+
+    checkAdminAccess() {
+      const userTypeCd = localStorage.getItem('user_typ_cd');
+
+      if (userTypeCd === 'U01') {
+        alert('You do not have permission to access ADMIN.');
+      } else {
+        this.$router.push('/admin/scs');  // 如果有权限，则跳转到 ADMIN 页面
       }
     },
 

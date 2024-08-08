@@ -301,7 +301,7 @@ export default {
       if (userTypeCd === 'U01') {
         alert('You do not have permission to access ADMIN.');
       } else {
-        this.$router.push('/admin/scs');  // 如果有权限，则跳转到 ADMIN 页面
+        this.$router.push('/admin/scs'); // 如果有权限，则跳转到 ADMIN 页面
       }
     },
     search() {

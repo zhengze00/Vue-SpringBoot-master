@@ -9,7 +9,7 @@
             <router-link to="/seller">SELLER</router-link>
           </li>
           <li class="sub on">
-            <a href="/admin/scs"  class="active">ADMIN</a>
+            <a href="/admin/scs" class="active">ADMIN</a>
             <ul class="lnb-menu-sub" style="display: block">
               <li><a class="active">Sales Commission Settlement</a></li>
             </ul>
@@ -96,7 +96,7 @@
               </td>
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
-              <td>{{ salePhnNum.user_bank_acc }}</td> <!-- Update this line -->
+              <td>{{ salePhnNum.user_bank_acc }}</td>
             </tr>
             </tbody>
           </table>
@@ -108,8 +108,8 @@
             <a class="last" @click="goToPage(totalPages)" :class="{ disabled: currentPage === totalPages }"></a>
           </div>
           <div class="btn-area">
-            <a class="">Total Own: {{ totalOwnerPrice.toFixed(0) }}</a>
-            <a class="">Settlement Rate: ({{ (settlementRate * 100) }}%)</a>
+            <a class="">Total Own: {{ totalOwnerPrice }}</a>
+            <a class="">Settlement Rate: (90%)</a>
           </div>
           <div class="pop-btn-area">
             <button class="pop-btn type2" @click="markSettlementCompleted">Settlement Completed</button>
@@ -129,7 +129,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      salePhnNums: [],
+      salePhnNums: [], // Initialize as empty array
       exchangeRate: 1,
       settlementRate: 1,
       selectedOwner: '', // Default to empty so that ALL is the default
@@ -152,8 +152,11 @@ export default {
 
   computed: {
     filteredSalePhnNums() {
+      if (!Array.isArray(this.salePhnNums)) {
+        return []; // Ensure salePhnNums is always an array
+      }
+
       return this.salePhnNums.filter(salePhnNum => {
-        // 处理过滤逻辑
         const isSoldOut = salePhnNum.sale_status_cd === 'SoldOut';
 
         const matchesOwner = !this.selectedOwner || salePhnNum.rgst_nm === this.selectedOwner;
@@ -176,9 +179,9 @@ export default {
       return this.filteredSalePhnNums.slice(start, end);
     },
     totalOwnerPrice() {
-      return this.filteredSalePhnNums.reduce((total, salePhnNum) => {
+      return (this.filteredSalePhnNums.reduce((total, salePhnNum) => {
         return total + (parseFloat(salePhnNum.sale_price || 0) * this.settlementRate);
-      }, 0);
+      }, 0)).toFixed(0);
     }
   },
 
@@ -200,8 +203,7 @@ export default {
 
         if (response.data.code === 1) {
           alert('Settlement Completed.');
-          // Fetch data again after update
-          this.fetchSalePhnNums();
+          this.fetchSalePhnNums(); // Fetch data again after update
         } else {
           alert('Failed to mark settlement as completed.');
         }
@@ -221,20 +223,20 @@ export default {
             endDate: this.endDate
           },
           headers: {
-            token: `${token}` // 添加 token 作为 Authorization header
+            token: `${token}` // Adding token as Authorization header
           }
         });
 
-        // 更新数据
-        this.salePhnNums = response.data.bankAccount; // 从新的接口字段中提取数据
-        this.exchangeRate = parseFloat(response.data.exchangeRate);
-        this.settlementRate = parseFloat(response.data.settlementRate) / 100;
+        // Update data
+        this.salePhnNums = response.data.bankAccount || []; // Ensure it's an array
+        this.exchangeRate = parseFloat(response.data.exchangeRate) || 1;
+        this.settlementRate = parseFloat(response.data.settlementRate) / 100 || 1;
 
-        // 提取唯一所有者
+        // Extract unique owners
         const uniqueOwners = [...new Set(this.salePhnNums.map(item => item.rgst_nm))];
-        this.owners = uniqueOwners.sort(); // 排序，如果需要
+        this.owners = uniqueOwners.sort(); // Sort if needed
 
-        // 如果没有选择所有者，则设置为空字符串（表示“所有”）
+        // If no owner is selected, set to empty string (show "ALL")
         if (!this.selectedOwner) {
           this.selectedOwner = '';
         }
@@ -248,8 +250,7 @@ export default {
       this.startDate = '';
       this.endDate = '';
       this.currentPage = 1;
-      // Fetch data again after reset
-      this.fetchSalePhnNums();
+      this.fetchSalePhnNums(); // Fetch data again after reset
     },
 
     goToPage(page) {
