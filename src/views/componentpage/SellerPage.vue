@@ -139,10 +139,9 @@
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
               <td>{{ salePhnNum.sale_contact }}</td>
-              <td>
-                <span class="operation" @click="editRecord(salePhnNum)">Edit</span>
-                <span class="separator">|</span>
-                <span class="operation" @click="confirmDelete(salePhnNum.sale_id)">Delete</span>
+              <td><span v-if="salePhnNum.rgst_nm === rgstNm" class="operation" @click="editRecord(salePhnNum)">Edit</span>
+                <span v-if="salePhnNum.rgst_nm === rgstNm" class="separator">|</span>
+                <span v-if="salePhnNum.rgst_nm === rgstNm" class="operation" @click="confirmDelete(salePhnNum.sale_id)">Delete</span>
               </td>
             </tr>
             </tbody>
@@ -425,7 +424,7 @@ export default {
         } catch (error) {
           console.error('Error deleting data:', error);
           alert('Error deleting data.');
-            }
+        }
       }
     },
     goToPage(page) {
