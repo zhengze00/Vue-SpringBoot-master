@@ -13,7 +13,7 @@
               <span class="allmenu-btn">ALLMENU</span>
               <ul class="sub_menu">
                 <li @click="openPersonalDataModal">Personal Data</li>
-                <li @click="openPersonalDataModal1 ">Change Password</li>
+                <li @click="openChangePasswordModal">Change Password</li>
                 <li @click="logout">Logout</li>
               </ul>
             </li>
@@ -60,15 +60,15 @@
             <p>Owner Name:</p>
             <p>Current Password:</p>
             <p>New Password:</p>
-<!--
-            <p>Confirm New Password:</p>
--->
+            <!--
+                        <p>Confirm New Password:</p>
+            -->
           </div>
           <div class="modal-section">
-            <input v-model="updateForm.rgstName" readonly />
+            <input v-model="updateForm1.rgstName" readonly />
             <input v-model="updateForm1.currentPassword" type="password" class="input-gray" />
             <input v-model="updateForm1.newPassword" type="password" class="input-gray" />
-<!--            <input v-model="updateForm1.confirmNewPassword" type="password" class="input-gray" />-->
+            <!--            <input v-model="updateForm1.confirmNewPassword" type="password" class="input-gray" />-->
           </div>
         </div>
         <div class="btn-area">
@@ -106,10 +106,14 @@ export default {
     openPersonalDataModal() {
       this.showModal = true;
       this.updateForm.rgstName = localStorage.getItem('rgst_nm') || '';
+      this.updateForm.userName = localStorage.getItem('userName') || ''; // Assuming you want to load additional data
+      this.updateForm.userContact = localStorage.getItem('userContact') || ''; // Assuming you want to load additional data
+      this.updateForm.userBankAccount = localStorage.getItem('userBankAccount') || ''; // Assuming you want to load additional data
     },
-    openPersonalDataModal1(){
+    openChangePasswordModal() {
       this.showModal1 = true;
       this.updateForm1.rgstName = localStorage.getItem('rgst_nm') || '';
+      // Optionally load additional data if needed
     },
     submitData() {
       const token = localStorage.getItem('token');
@@ -143,7 +147,7 @@ export default {
     changePassword() {
       const token = localStorage.getItem('token');
       axios.post('http://localhost:8081/changePassword', {
-        user_nm: this.updateForm.userName, // 确保发送用户名
+        user_nm: this.updateForm.userName, // Ensure sending username if needed
         user_pw: this.updateForm1.newPassword,
         rgst_nm: this.updateForm1.rgstName
       }, {
