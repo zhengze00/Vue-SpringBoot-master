@@ -240,16 +240,18 @@ export default {
       userId: '',
       userTypCd: '',
       rgstNm: '',
-      userName: '',
-      userContact: '',
-      userBankAcc: '',
+      userName: '', // 添加
+      userContact: '', // 添加
+      userBankAcc: '', // 添加
       form: {
         prefixNumber: '', // 默认选择010
         category: '',
         phoneNumber: '',
         price: '',
         status: '', // 默认状态
-        uploadDate: new Date().toISOString().substr(0, 10) // 默认当天日期
+        uploadDate: new Date().toISOString().substr(0, 10), // 默认当天日期
+        user_typ_cd: localStorage.getItem('user_typ_cd'),  // 新增字段
+        user_nm: localStorage.getItem('user_nm')
       },
       editForm: {
         prefixNumber: '', // 默认选择010
@@ -274,9 +276,9 @@ export default {
     this.userId = localStorage.getItem('user_id');
     this.userTypCd = localStorage.getItem('user_typ_cd');
     this.rgstNm = localStorage.getItem('rgst_nm');
-    this.userName = localStorage.getItem('user_nm');
-    this.userContact = localStorage.getItem('user_contact');
-    this.userBankAcc = localStorage.getItem('user_bank_acc');
+    this.userName = localStorage.getItem('user_nm'); // 添加这一行
+    this.userContact = localStorage.getItem('user_contact'); // 添加这一行
+    this.userBankAcc = localStorage.getItem('user_bank_acc'); // 添加这一行
     this.fetchSalePhnNums();
   },
   methods: {
@@ -345,7 +347,9 @@ export default {
         sale_phn_num: this.form.phoneNumber,
         sale_price: this.form.price,
         sale_status_cd: this.form.status,
-        rgst_dt: this.form.uploadDate
+        rgst_dt: this.form.uploadDate,
+        user_typ_cd: this.form.user_typ_cd,  // 发送 user_typ_cd
+        user_nm: this.form.user_nm
       }, {
         headers: {
           token: `${token}`
@@ -360,7 +364,9 @@ export default {
               phoneNumber: '',
               price: '',
               status: '',
-              uploadDate: new Date().toISOString().substr(0, 10)
+              uploadDate: new Date().toISOString().substr(0, 10),
+              user_typ_cd: localStorage.getItem('user_typ_cd'), // 重置为 localStorage 中的值
+              user_nm: localStorage.getItem('user_nm')
             };
             this.fetchSalePhnNums(); // 刷新数据
           })
@@ -421,8 +427,8 @@ export default {
       if (this.recordToDelete) {
         try {
           const token = localStorage.getItem('token');
-          await axios.post('http://localhost:8081/delete_phone', { sale_id: this.recordToDelete }, {
-            headers: { token: `${token}` }
+          await axios.post('http://localhost:8081/delete_phone', {sale_id: this.recordToDelete}, {
+            headers: {token: `${token}`}
           });
           this.fetchSalePhnNums(); // 刷新数据
           this.showDeleteConfirm = false; // 关闭确认对话框

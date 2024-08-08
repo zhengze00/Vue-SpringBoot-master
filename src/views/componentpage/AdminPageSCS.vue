@@ -109,7 +109,7 @@
           </div>
           <div class="btn-area">
             <a class="">Total Own: {{ totalOwnerPrice }}</a>
-            <a class="">Settlement Rate: (90%)</a>
+            <a class="">Settlement Rate: ({{ settlementRate * 100 }}%)</a>
           </div>
           <div class="pop-btn-area">
             <button class="pop-btn type2" @click="markSettlementCompleted">Settlement Completed</button>

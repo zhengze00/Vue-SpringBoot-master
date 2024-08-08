@@ -47,7 +47,6 @@ export default {
 
   methods: {
     async handleLogin() {
-
       try {
         const response = await axios.post('http://localhost:8081/login', {
           user_nm: this.user_nm,
@@ -62,6 +61,7 @@ export default {
           localStorage.setItem('user_id', userData.user_id);
           localStorage.setItem('user_typ_cd', userData.user_typ_cd);
           localStorage.setItem('rgst_nm', userData.rgst_nm);
+
           localStorage.setItem('user_nm', userData.user_nm); // 添加这一行
           localStorage.setItem('user_contact', userData.user_contact); // 添加这一行
           localStorage.setItem('user_bank_acc', userData.user_bank_acc); // 添加这一行
