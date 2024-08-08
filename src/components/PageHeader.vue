@@ -22,6 +22,7 @@
       </div>
     </header>
 
+    <!-- Personal Data Modal -->
     <div class="modal" :class="{ show: showModal }" @click.self="showModal = false">
       <div class="modal-content">
         <div class="modal-header">
@@ -36,19 +37,30 @@
             <p>Bank Account:</p>
           </div>
           <div class="modal-section">
-            <input v-model="updateForm.rgstName" readonly @keyup.enter="submitData"/>
-            <input v-model="updateForm.userName" type="text" @keyup.enter="submitData" />
-            <input v-model="updateForm.userContact" type="text" @keyup.enter="submitData"/>
-            <input v-model="updateForm.userBankAcc" type="text" @keyup.enter="submitData"/>
+            <input v-model="updateForm.rgstName" readonly />
+            <input
+                v-model="updateForm.userName"
+                type="text"
+                @keyup.enter="submitData"
+            />
+            <input
+                v-model="updateForm.userContact"
+                type="text"
+                @input="formatPhoneNumber"
+                maxlength="13"
+                @keyup.enter="submitData"
+            />
+            <input v-model="updateForm.userBankAcc" type="text" />
           </div>
         </div>
         <div class="btn-area">
           <a class="close-btn" @click="showModal = false">Cancel</a>
-          <a class="next" @click="submitData" @keyup.enter="submitData">Submit</a>
+          <a class="next" @click="submitData">Submit</a>
         </div>
       </div>
     </div>
 
+    <!-- Change Password Modal -->
     <div class="modal" :class="{ show: showModal1 }" @click.self="showModal1 = false">
       <div class="modal-content">
         <div class="modal-header">
@@ -60,17 +72,23 @@
             <p>New Password:</p>
           </div>
           <div class="modal-section">
-            <input v-model="updateForm1.newPassword" type="password" class="input-gray" @keyup.enter="changePassword" />
+            <input
+                v-model="updateForm1.newPassword"
+                type="password"
+                class="input-gray"
+                @keyup.enter="changePassword"
+            />
           </div>
         </div>
         <div class="btn-area">
           <a class="close-btn" @click="showModal1 = false">Cancel</a>
-          <a class="next" @click="changePassword" @keyup.enter="changePassword">Submit</a>
+          <a class="next" @click="changePassword">Submit</a>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -96,8 +114,6 @@ export default {
   methods: {
     openPersonalDataModal() {
       this.showModal = true;
-
-      // 读取 localStorage 中的用户数据
       this.updateForm.rgstName = localStorage.getItem('rgst_nm') || '';
       this.updateForm.userName = localStorage.getItem('user_nm') || '';
       this.updateForm.userContact = localStorage.getItem('user_contact') || '';
@@ -115,7 +131,7 @@ export default {
 
       const token = localStorage.getItem('token');
       axios.post('http://localhost:8081/updateUserData', {
-        user_id: localStorage.getItem('user_id'), // Ensure you have user_id in localStorage
+        user_id: localStorage.getItem('user_id'),
         user_nm: this.updateForm.userName,
         user_contact: this.updateForm.userContact,
         rgst_nm: this.updateForm.rgstName,
@@ -128,7 +144,6 @@ export default {
           .then(() => {
             alert('Data updated successfully!');
             this.showModal = false;
-            // Optionally, update localStorage with the new values
             localStorage.setItem('user_nm', this.updateForm.userName);
             localStorage.setItem('user_contact', this.updateForm.userContact);
             localStorage.setItem('user_bank_acc', this.updateForm.userBankAcc);
@@ -146,7 +161,7 @@ export default {
 
       const token = localStorage.getItem('token');
       axios.post('http://localhost:8081/changePassword', {
-        user_nm: this.updateForm.userName, // Ensure sending username if needed
+        user_nm: this.updateForm.userName,
         user_pw: this.updateForm1.newPassword,
         rgst_nm: this.updateForm1.rgstName
       }, {
@@ -158,9 +173,7 @@ export default {
             alert('Password changed successfully!');
             this.showModal1 = false;
             this.updateForm1 = {
-              currentPassword: '',
-              newPassword: '',
-              confirmNewPassword: ''
+              newPassword: ''
             };
           })
           .catch(error => {
@@ -171,6 +184,25 @@ export default {
     logout() {
       localStorage.clear();
       this.$router.push('/home');
+    },
+    formatPhoneNumber(event) {
+      let value = event.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+      // Limit input length to 11 digits
+      if (value.length > 11) {
+        value = value.slice(0, 11);
+      }
+
+      // Format the phone number
+      if (value.length > 3) {
+        value = value.slice(0, 3) + '-' + value.slice(3);
+      }
+      if (value.length > 8) {
+        value = value.slice(0, 8) + '-' + value.slice(8);
+      }
+
+      // Update the input field
+      this.updateForm.userContact = value;
     }
   }
 };

@@ -70,7 +70,7 @@
                 </div>
               </div>
               <div class="modal" :class="{ show: showModal }" @click.self="showModal = false">
-                <div class="modal-content">
+                <div class="modal-content" @keydown.enter="submitForm">
                   <div class="modal-header">
                     <h2>Upload Phone Number</h2>
                     <span class="close-btn" @click="showModal = false">×</span>
@@ -91,7 +91,11 @@
                       <select v-model="form.category">
                         <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
                       </select>
-                      <input v-model="form.phoneNumber" placeholder=""/>
+                      <input
+                          v-model="form.phoneNumber"
+                          @input="formatPhoneNumber"
+                          maxlength="13"
+                      />
                       <input v-model="form.price" placeholder="" />
                       <select v-model="form.status">
                         <option value="Selling">Selling</option>
@@ -100,9 +104,9 @@
                       <input type="date" v-model="form.uploadDate" />
                     </div>
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" @click="submitForm">Submit</button>
-                    <button type="button" @click="showModal = false">Cancel</button>
+                  <div class="btn-area">
+                    <a @click="showModal = false">Cancel</a>
+                    <a class="next" @click="submitForm">Submit</a>
                   </div>
                 </div>
               </div>
@@ -156,7 +160,7 @@
           </div>
           <!-- Edit Modal -->
           <div class="modal" :class="{ show: showEditModal }" @click.self="showEditModal = false">
-            <div class="modal-content">
+            <div class="modal-content" @keydown.enter="updateData" tabindex="0">
               <div class="modal-header">
                 <h2>Edit Phone Number</h2>
                 <span class="close-btn" @click="showEditModal = false">×</span>
@@ -186,9 +190,9 @@
                   <input type="date" v-model="editForm.uploadDate" />
                 </div>
               </div>
-              <div class="modal-footer">
-                <button type="button" @click="updateData">Update</button>
-                <button type="button" @click="showEditModal = false">Cancel</button>
+              <div class="btn-area">
+                <a class="close-btn" @click="showModal = false">Cancel</a>
+                <a class="next" @click="updateData">Update</a>
               </div>
             </div>
           </div>
@@ -296,12 +300,25 @@ export default {
         console.error('Error fetching components:', error);
       }
     },
-    formatPhoneNumber() {
-      const rawNumber = this.form.phoneNumber.replace(/-/g, '');
-      if (rawNumber.length === 11) {
-        this.form.phoneNumber = `${rawNumber.slice(0, 3)}-${rawNumber.slice(3, 7)}-${rawNumber.slice(7)}`;
+    formatPhoneNumber(event) {
+      let value = event.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+
+      // Limit input length to 11 digits
+      if (value.length > 11) {
+        value = value.slice(0, 11);
       }
-    },
+
+      // Format the phone number
+      if (value.length > 3) {
+        value = value.slice(0, 3) + '-' + value.slice(3);
+      }
+      if (value.length > 8) {
+        value = value.slice(0, 8) + '-' + value.slice(8);
+      }
+
+      // Update the input field
+      this.form.phoneNumber = value;
+      },
     checkAdminAccess() {
       const userTypeCd = localStorage.getItem('user_typ_cd');
 
