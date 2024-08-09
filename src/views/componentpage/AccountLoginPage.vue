@@ -24,7 +24,7 @@
           >
         </div>
         <div class="pop-btn-area">
-          <router-link to="/home" class="pop-btn">Return</router-link>
+          <router-link to="/" class="pop-btn">Return</router-link>
           <button @click="handleLogin" class="pop-btn type2">Login</button>
         </div>
       </div>

@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
+/*
 import PageHome from '@/views/PageHome.vue';
+*/
 import BoardList from '@/views/board/BoardList.vue';
-import HomePage from "@/views/componentpage/HomePage.vue";
+import HomePage from '@/views/componentpage/HomePage.vue';
 import AccountLoginPage from "@/views/componentpage/AccountLoginPage.vue";
 import SellerPage from "@/views/componentpage/SellerPage.vue";
 import SellerPageSCSC from "@/views/componentpage/SellerSCSC.vue";
@@ -10,8 +12,10 @@ import AdminPageSCS from "@/views/componentpage/AdminPageSCS.vue";
 const routes = [
     {
         path: '/',
-        name: 'PageHome',
-        component: PageHome
+        name: 'HomePage',
+        component: HomePage
+     /*   name: 'PageHome',
+        component: PageHome*/
     },
     {
         path: '/about',
@@ -24,9 +28,10 @@ const routes = [
         component: BoardList
     },
     {
-        path: '/home',
+  /*      path: '/home',
         name: 'HomePage',
-        component: HomePage
+        component: HomePage*/
+
     },
     {
         path: '/account/login',
