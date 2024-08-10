@@ -58,10 +58,28 @@
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+    font-weight: bold;
+ /*   justify-content: center; !* 水平居中 *!*/
+
 }
 
 .modal-section {
-    width: 45%;
+    width: 49%;
+
+}
+
+
+
+.modal-section h3 {
+    margin: 10px 0;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.modal-section label {
+    display: block;
+    margin: 5px 0;
+    font-weight: bold;
 }
 
 .modal-section select {
@@ -76,18 +94,6 @@
     color: #333; /* 字体颜色，确保可读性 */
     font-weight: normal; /* 去掉粗体 */
     width: 100%;
-}
-
-.modal-section h3 {
-    margin: 10px 0;
-    font-size: 15px;
-    font-weight: bold;
-}
-
-.modal-section label {
-    display: block;
-    margin: 5px 0;
-    font-weight: bold;
 }
 
 .modal-section input {
@@ -108,13 +114,13 @@
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     text-align: center;
+    font-weight: bold;
     padding: 8px;
     border-radius: 5px;
     margin: 4px 0;
     margin-bottom: 2px;
     font-size: 14px; /* 合适的字体大小 */
     color: #333; /* 字体颜色，确保可读性 */
-    font-weight: normal; /* 去掉粗体 */
     width: 100%;
 }
 
@@ -1065,27 +1071,40 @@ textarea:focus,
 
 /* 固定表格宽度 */
 .table-style {
-    width: 1200px; /* 根据需要调整为固定宽度 */
+    width: 1260px; /* 根据需要调整为固定宽度 */
     table-layout: auto; /* 允许列宽根据内容自动调整 */
     border-top: 2px solid #43496b;
     border-collapse: collapse;
+
 }
 
+.summary-info {
+    width: 1250px; /* 与表格宽度一致 */
+    text-align: right; /* 内容靠右对齐 */
+    margin-top: 10px; /* 根据需要调整与表格的间距 */
+    margin-left: auto; /* 使其与表格对齐 */
+    margin-right: auto; /* 使其与表格对齐 */
+}
 /* 固定表格容器宽度 - 可以根据需要调整 */
 .table-container {
-    width: 1200px; /* 与表格宽度相同 */
+    overflow-x: auto;
+    max-width: 100%; /* 与表格宽度相同 */
 }
 
 /* 表头样式，确保列宽根据内容调整 */
 .table-style th {
     white-space: nowrap; /* 防止标题折行 */
     padding: 8px; /* 适当的内边距 */
+    text-align: center;
+    vertical-align: middle;
 }
 
 /* 表格内容单元格样式 */
 .table-style td {
     white-space: nowrap; /* 防止内容折行 */
     padding: 8px; /* 适当的内边距 */
+    text-align: center;
+    vertical-align: middle;
 }
 
 /* 其他样式保持不变 */
@@ -1402,6 +1421,9 @@ textarea:focus,
     height: 125px;
     padding: 15px 0 0;
 }
+
+
+
 .summary-section dd p.naru-info-txt {
     font-size: 13px;
     color: #999;
@@ -2714,6 +2736,12 @@ textarea:focus,
     text-indent: -9999px;
     background-image: url(../images/ico_del.png);
 }
+.btn-edit {
+    width: 17px;
+    height: 17px;
+    text-indent: -9999px;
+    background-image: url(../images/ico_edit.png);
+}
 .btn-view {
     width: 17px;
     height: 17px;
@@ -3207,6 +3235,23 @@ input.datepicker {
 .pop-btn-area .pop-btn + .pop-btn {
     margin-left: 8px;
 }
+
+.pop-btn-area .pop-btn2 {
+    display: inline-block;
+    width: 180px;
+    height: 48px;
+    border: 1px solid #b8bed6;
+    border-radius: 6px;
+    box-sizing: border-box;
+    color: #666;
+    font-size: 15px;
+    line-height: 48px;
+    border-color: transparent;
+    color: #fff;
+    background-color: #285add;
+}
+
+
 
 .input-group {
     display: flex;

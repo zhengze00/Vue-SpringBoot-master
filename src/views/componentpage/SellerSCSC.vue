@@ -82,25 +82,21 @@
               <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
               <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
               <td>{{ salePhnNum.sale_ctgr_cd }}</td>
-              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px;">
-                {{ salePhnNum.sale_phn_num }}
-              </td>
-              <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
-              <td style="text-align: right;">
-                {{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}
-              </td>
+              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px;">{{ salePhnNum.sale_phn_num }}              </td>
+              <td style="text-align: right;">{{ salePhnNum.sale_price.toLocaleString('ms-MY', { style: 'currency', currency: 'MYR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('RM', '') }}</td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('₩', '') }}</td>
               <td>{{ salePhnNum.sale_status_cd }}</td>
-              <td style="text-align: right;">
-                {{ (salePhnNum.sale_price * settlementRate).toFixed(0) }}
-              </td>
-              <td style="text-align: right;">
-                {{ (salePhnNum.sale_price * settlementRate * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}
-              </td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * (1 - settlementRate)).toFixed(0) }}              </td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * settlementRate * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
             </tr>
             </tbody>
           </table>
+          <div class="summary-info">
+            <h> (Settlement Rate:{{ settlementRate * 100 }}%)</h>
+            <h> ( Total Own:{{ totalOwnerPrice }} )</h>
+          </div>
 
           <div class="pageing">
             <a class="first" @click="goToPage(1)" :class="{ disabled: currentPage === 1 }"></a>
@@ -109,10 +105,7 @@
             <a class="next" @click="goToPage(currentPage + 1)" :class="{ disabled: currentPage === totalPages }"></a>
             <a class="last" @click="goToPage(totalPages)" :class="{ disabled: currentPage === totalPages }"></a>
           </div>
-          <div class="btn-area">
-            <a class="">Total Own: {{ totalOwnerPrice }}</a>
-            <a class="">Settlement Rate: ({{ settlementRate * 100 }}%)</a>
-          </div>
+
         </div>
       </div>
     </div>
@@ -170,7 +163,7 @@ export default {
     },
     totalOwnerPrice() {
       return this.filteredSalePhnNums.reduce((total, salePhnNum) => {
-        return total + (salePhnNum.sale_price * this.settlementRate);
+        return total + (salePhnNum.sale_price * (1 - this.settlementRate));
       }, 0).toFixed(0);
     }
   },

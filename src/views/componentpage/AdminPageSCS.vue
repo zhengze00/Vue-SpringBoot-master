@@ -2,7 +2,7 @@
   <PageHeader/>
   <div class="wrap">
     <div class="container">
-      <aside class="lnb">
+    <aside class="lnb">
         <h2 class="lnb-tit">MENU</h2>
         <ul class="lnb-menu">
           <li class="sub ">
@@ -80,26 +80,22 @@
               <td>{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
               <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
               <td>{{ salePhnNum.sale_ctgr_cd }}</td>
-              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px;">
-                {{ salePhnNum.sale_phn_num }}
-              </td>
-              <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
-              <td style="text-align: right;">
-                {{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}
-              </td>
+              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px;">{{ salePhnNum.sale_phn_num }}</td>
+              <td style="text-align: right;">{{ salePhnNum.sale_price.toLocaleString('ms-MY', { style: 'currency', currency: 'MYR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('RM', '') }}</td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('₩', '') }}</td>
               <td>{{ salePhnNum.sale_status_cd }}</td>
-              <td style="text-align: right;">
-                {{ (salePhnNum.sale_price * settlementRate).toFixed(0) }}
-              </td>
-              <td style="text-align: right;">
-                {{ (salePhnNum.sale_price * settlementRate * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}
-              </td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * (1 - settlementRate)).toFixed(0) }}              </td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * settlementRate * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
               <td>{{ salePhnNum.user_bank_acc }}</td>
             </tr>
             </tbody>
           </table>
+          <div class="summary-info">
+          <h> (Settlement Rate:{{ settlementRate * 100 }}%)</h>
+          <h> ( Total Own:{{ totalOwnerPrice }} )</h>
+        </div>
           <div class="pageing">
             <a class="first" @click="goToPage(1)" :class="{ disabled: currentPage === 1 }"></a>
             <a class="pre" @click="goToPage(currentPage - 1)" :class="{ disabled: currentPage === 1 }"></a>
@@ -107,12 +103,9 @@
             <a class="next" @click="goToPage(currentPage + 1)" :class="{ disabled: currentPage === totalPages }"></a>
             <a class="last" @click="goToPage(totalPages)" :class="{ disabled: currentPage === totalPages }"></a>
           </div>
-          <div class="btn-area">
-            <a class="">Total Own: {{ totalOwnerPrice }}</a>
-            <a class="">Settlement Rate: ({{ settlementRate * 100 }}%)</a>
-          </div>
+
           <div class="pop-btn-area">
-            <button class="pop-btn type2" @click="markSettlementCompleted">Settlement Completed</button>
+            <button class="pop-btn2 type3" @click="markSettlementCompleted">Settlement Completed</button>
           </div>
         </div>
       </div>
@@ -179,9 +172,9 @@ export default {
       return this.filteredSalePhnNums.slice(start, end);
     },
     totalOwnerPrice() {
-      return (this.filteredSalePhnNums.reduce((total, salePhnNum) => {
-        return total + (parseFloat(salePhnNum.sale_price || 0) * this.settlementRate);
-      }, 0)).toFixed(0);
+      return this.filteredSalePhnNums.reduce((total, salePhnNum) => {
+        return total + (salePhnNum.sale_price * (1 - this.settlementRate));
+      }, 0).toFixed(0);
     }
   },
 
@@ -230,7 +223,7 @@ export default {
         // Update data
         this.salePhnNums = response.data.bankAccount || []; // Ensure it's an array
         this.exchangeRate = parseFloat(response.data.exchangeRate) || 1;
-        this.settlementRate = parseFloat(response.data.settlementRate) / 100 || 1;
+        this.settlementRate = parseFloat(response.data.settlementRate) / 100;
 
         // Extract unique owners
         const uniqueOwners = [...new Set(this.salePhnNums.map(item => item.rgst_nm))];

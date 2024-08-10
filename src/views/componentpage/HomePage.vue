@@ -113,11 +113,9 @@
             <tr v-for="salePhnNum in paginatedPhnNums" :key="salePhnNum.sale_id">
               <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
               <td>{{ salePhnNum.sale_ctgr_cd }}</td>
-              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px; ">
-                {{ salePhnNum.sale_phn_num }}
-              </td>
-              <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
-              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}</td>
+              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px; ">{{ salePhnNum.sale_phn_num }}</td>
+              <td style="text-align: right;">{{ salePhnNum.sale_price.toLocaleString('ms-MY', { style: 'currency', currency: 'MYR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('RM', '') }}</td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('₩', '') }}</td>
               <td>{{ salePhnNum.sale_status_cd }}</td>
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>

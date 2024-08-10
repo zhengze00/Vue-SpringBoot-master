@@ -33,7 +33,7 @@
           <div class="modal-section">
             <p>Owner Name:</p>
             <p>Username:</p>
-            <p>(WhatsApp) Contact Number:</p>
+            <p>Contact Number:</p>
             <p>Bank Account:</p>
           </div>
           <div class="modal-section">
@@ -183,7 +183,7 @@ export default {
     },
     logout() {
       localStorage.clear();
-      this.$router.push('/home');
+      this.$router.push('/');
     },
     formatPhoneNumber(event) {
       let value = event.target.value.replace(/\D/g, ''); // Remove non-numeric characters

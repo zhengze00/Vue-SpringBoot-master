@@ -132,20 +132,21 @@
             <tr v-for="salePhnNum in paginatedPhnNums" :key="salePhnNum.sale_id">
               <td>{{ salePhnNum.sale_phn_pfx_cd }}</td>
               <td>{{ salePhnNum.sale_ctgr_cd }}</td>
-              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px;">
-                {{ salePhnNum.sale_phn_num }}
-              </td>
-              <td style="text-align: right;">{{ salePhnNum.sale_price }}</td>
-              <td style="text-align: right;">
-                {{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' }).replace('₩', '') }}
-              </td>
+              <td style="font-weight: 900; padding: 0.5em; border-radius: 4px;">{{ salePhnNum.sale_phn_num }}              </td>
+              <td style="text-align: right;">{{ salePhnNum.sale_price.toLocaleString('ms-MY', { style: 'currency', currency: 'MYR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('RM', '') }}</td>
+              <td style="text-align: right;">{{ (salePhnNum.sale_price * exchangeRate).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW', minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace('₩', '') }}</td>
               <td>{{ salePhnNum.sale_status_cd }}</td>
               <td>{{ salePhnNum.rgst_dt }}</td>
               <td>{{ salePhnNum.rgst_nm }}</td>
               <td>{{ salePhnNum.sale_contact }}</td>
-              <td><span v-if="salePhnNum.rgst_nm === rgstNm" class="operation" @click="editRecord(salePhnNum)">Edit</span>
+              <td>
+                <button v-if="salePhnNum.rgst_nm === rgstNm" class="btn-edit" @click="editRecord(salePhnNum)">
+                  Edit
+                </button>
                 <span v-if="salePhnNum.rgst_nm === rgstNm" class="separator">|</span>
-                <span v-if="salePhnNum.rgst_nm === rgstNm" class="operation" @click="confirmDelete(salePhnNum.sale_id)">Delete</span>
+                <button v-if="salePhnNum.rgst_nm === rgstNm" class="btn-del" @click="confirmDelete(salePhnNum.sale_id)">
+                  Delete
+                </button>
               </td>
             </tr>
             </tbody>
@@ -182,7 +183,7 @@
                     <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
                   </select>
                   <input v-model="editForm.phoneNumber" readonly placeholder="" />
-                  <input v-model="editForm.price" placeholder="" />
+                  <input :value="formattedPrice" @input="updatePrice" placeholder=""/>
                   <select v-model="editForm.status">
                     <option value="Selling">Selling</option>
                     <option value="SoldOut">SoldOut</option>
@@ -206,9 +207,9 @@
               <div class="modal-body">
                 <p>Are you sure you want to delete this data?</p>
               </div>
-              <div class="modal-footer">
-                <button type="button" @click="deleteData">Yes</button>
-                <button type="button" @click="showDeleteConfirm = false">Cancel</button>
+              <div class="btn-area">
+                <a class="close-btn" @click="showDeleteConfirm = false">Cancel</a>
+                <a class="next" @click="deleteData">Yes</a>
               </div>
             </div>
           </div>
@@ -261,7 +262,7 @@ export default {
         prefixNumber: '', // 默认选择010
         category: '',
         phoneNumber: '',
-        price: '',
+        price: '', // 原始数据，格式化后显示
         status: '', // 默认状态
         uploadDate: new Date().toISOString().substr(0, 10) // 默认当天日期
       },
@@ -286,6 +287,10 @@ export default {
     this.fetchSalePhnNums();
   },
   methods: {
+    updatePrice(event) {
+      // 将输入框的值设置为计算属性
+      this.formattedPrice = event.target.value;
+    },
     async fetchSalePhnNums() {
       try {
         const response = await axios.get('http://localhost:8081/getSalePhnNum', {
@@ -462,6 +467,19 @@ export default {
     }
   },
   computed: {
+    formattedPrice: {
+      // 格式化显示价格
+      get() {
+        // 将原始价格格式化为千位分隔符形式
+        const number = parseFloat(this.editForm.price);
+        return isNaN(number) ? '' : number.toLocaleString('en-MY');
+      },
+      // 更新原始价格数据
+      set(value) {
+        // 去掉千位分隔符，更新原始数据
+        this.editForm.price = value.replace(/,/g, '');
+      }
+    },
     totalPages() {
       return Math.ceil(this.filteredPhnNums.length / this.itemsPerPage);
     },
