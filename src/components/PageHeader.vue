@@ -14,7 +14,7 @@
               <ul class="sub_menu">
                 <li @click="openPersonalDataModal">Personal Data</li>
                 <li @click="openChangePasswordModal">Change Password</li>
-                <li @click="logout">Logout</li>
+                <li @click="openLogoutModal">Logout</li>
               </ul>
             </li>
           </ul>
@@ -25,9 +25,9 @@
     <!-- Personal Data Modal -->
     <div class="modal" :class="{ show: showModal }" @click.self="showModal = false">
       <div class="modal-content">
+        <span class="close-btn close-btn-top-right" @click="showModal = false">&times;</span>
         <div class="modal-header">
           <h2>Personal Data</h2>
-          <span class="close-btn" @click="showModal = false">&times;</span>
         </div>
         <div class="modal-body">
           <div class="modal-section">
@@ -65,7 +65,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h2>Change Password</h2>
-          <span class="close-btn" @click="showModal1 = false">&times;</span>
+          <span class="close-btn close-btn-top-right" @click="showModal1 = false">&times;</span>
         </div>
         <div class="modal-body">
           <div class="modal-section">
@@ -86,9 +86,25 @@
         </div>
       </div>
     </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal" :class="{ show: showLogoutModal }" @click.self="showLogoutModal = false">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Logout</h2>
+          <span class="close-btn close-btn-top-right" @click="showLogoutModal = false">&times;</span>
+        </div>
+        <div class="modal-content-body">
+          <p>Do you confirm to logout?</p>
+        </div>
+        <div class="btn-area">
+          <a class="close-btn" @click="showLogoutModal = false">Cancel</a>
+          <a class="next" @click="confirmLogout">Confirm</a>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
 
 <script>
 import axios from 'axios';
@@ -98,6 +114,7 @@ export default {
     return {
       showModal: false,
       showModal1: false,
+      showLogoutModal: false, // 新增变量
       updateForm1: {
         userPw: '',
         newPassword: '',
@@ -122,6 +139,13 @@ export default {
     openChangePasswordModal() {
       this.showModal1 = true;
       this.updateForm1.rgstName = localStorage.getItem('rgst_nm') || '';
+    },
+    openLogoutModal() { // 新增方法
+      this.showLogoutModal = true;
+    },
+    confirmLogout() { // 新增方法
+      localStorage.clear();
+      this.$router.push('/');
     },
     submitData() {
       if (!this.updateForm.userName || !this.updateForm.userContact || !this.updateForm.userBankAcc) {
@@ -180,10 +204,6 @@ export default {
             console.error('Error changing password:', error);
             alert('Error changing password.');
           });
-    },
-    logout() {
-      localStorage.clear();
-      this.$router.push('/');
     },
     formatPhoneNumber(event) {
       let value = event.target.value.replace(/\D/g, ''); // Remove non-numeric characters

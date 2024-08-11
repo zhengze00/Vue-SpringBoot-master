@@ -73,7 +73,7 @@
                 <div class="modal-content" @keydown.enter="submitForm">
                   <div class="modal-header">
                     <h2>Upload Phone Number</h2>
-                    <span class="close-btn" @click="showModal = false">×</span>
+                    <span class="close-btn close-btn-top-right" @click="showModal = false">×</span>
                   </div>
                   <div class="modal-body">
                     <div class="modal-section">
@@ -164,7 +164,7 @@
             <div class="modal-content" @keydown.enter="updateData" tabindex="0">
               <div class="modal-header">
                 <h2>Edit Phone Number</h2>
-                <span class="close-btn" @click="showEditModal = false">×</span>
+                <span class="close-btn close-btn-top-right" @click="showEditModal = false">×</span>
               </div>
               <div class="modal-body">
                 <div class="modal-section">
@@ -201,15 +201,15 @@
           <div class="modal" :class="{ show: showDeleteConfirm }" @click.self="showDeleteConfirm = false">
             <div class="modal-content">
               <div class="modal-header">
-                <h2>Confirm Deletion</h2>
-                <span class="close-btn" @click="showDeleteConfirm = false">×</span>
+                <h2>Delete Phone Number</h2>
+                <span class="close-btn close-btn-top-right" @click="showDeleteConfirm = false">×</span>
               </div>
-              <div class="modal-body">
+              <div class="modal-content-body">
                 <p>Are you sure you want to delete this data?</p>
               </div>
               <div class="btn-area">
                 <a class="close-btn" @click="showDeleteConfirm = false">Cancel</a>
-                <a class="next" @click="deleteData">Yes</a>
+                <a class="next" @click="deleteData">Confirm</a>
               </div>
             </div>
           </div>

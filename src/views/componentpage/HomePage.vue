@@ -140,13 +140,14 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h2>Sales Status of Each Prefix Number</h2>
-                  <span class="close-btn" @click="closeModal">&times;</span>
+                  <span class="close-btn close-btn-top-right" @click="closeModal">×</span>
+
                 </div>
                 <table>
                   <thead>
                   <tr>
-                    <th>Phone Prefix</th>
-                    <th>Sold Count</th>
+                    <th>Prefix Number</th>
+                    <th>Total Sales</th>
                   </tr>
                   </thead>
                   <tbody>

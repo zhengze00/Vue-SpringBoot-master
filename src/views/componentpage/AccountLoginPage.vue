@@ -4,7 +4,7 @@
     <div class="layer-pop-bg"></div>
     <div class="layer-pop-area" style="width: 400px">
       <div class="pop-head">
-        <h3>GoodLuckVIPStore CMS</h3>
+        <h3>Account Login</h3>
       </div>
       <div class="pop-body">
         <div class="input-group">
