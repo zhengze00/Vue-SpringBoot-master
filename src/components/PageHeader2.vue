@@ -1,4 +1,4 @@
-<!-- PageHeader.vue -->
+GLVS缩写<!-- PageHeader.vue -->
 <template>
   <div class="wrap">
     <!-- header : S -->

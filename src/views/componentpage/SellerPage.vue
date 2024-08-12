@@ -140,11 +140,22 @@
               <td>{{ salePhnNum.rgst_nm }}</td>
               <td>{{ salePhnNum.sale_contact }}</td>
               <td>
-                <button v-if="salePhnNum.rgst_nm === rgstNm" class="btn-edit" @click="editRecord(salePhnNum)">
+                <button
+                    v-if="salePhnNum.rgst_nm === rgstNm || userTypCd === 'U02'"
+                    class="btn-edit"
+                    @click="editRecord(salePhnNum)"
+                >
                   Edit
                 </button>
-                <span v-if="salePhnNum.rgst_nm === rgstNm" class="separator">|</span>
-                <button v-if="salePhnNum.rgst_nm === rgstNm" class="btn-del" @click="confirmDelete(salePhnNum.sale_id)">
+                <span
+                    v-if="salePhnNum.rgst_nm === rgstNm || userTypCd === 'U02'"
+                    class="separator"
+                >|</span>
+                <button
+                    v-if="salePhnNum.rgst_nm === rgstNm || userTypCd === 'U02'"
+                    class="btn-del"
+                    @click="confirmDelete(salePhnNum.sale_id)"
+                >
                   Delete
                 </button>
               </td>

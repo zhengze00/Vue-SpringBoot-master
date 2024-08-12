@@ -39,7 +39,7 @@
           <div class="modal-section">
             <input v-model="updateForm.rgstName" readonly />
             <input
-                v-model="updateForm.userName"
+                v-model="updateForm.userName" readonly
                 type="text"
                 @keyup.enter="submitData"
             />
