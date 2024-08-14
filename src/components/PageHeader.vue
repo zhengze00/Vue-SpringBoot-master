@@ -50,7 +50,10 @@
                 maxlength="13"
                 @keyup.enter="submitData"
             />
-            <input v-model="updateForm.userBankAcc" type="text" />
+            <input v-model="updateForm.userBankAcc"
+                   @keyup.enter="submitData"
+                   type="text"
+            />
           </div>
         </div>
         <div class="btn-area">

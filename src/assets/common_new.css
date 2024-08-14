@@ -276,8 +276,8 @@
     position: absolute;
     width: 162px;
     top: 68px;
-    left: 50%;
-    margin-left: -81px;
+    left: 30%; /* 设置 .sub_menu 从父元素的中心对齐 */
+    margin-left: -81px; /* 根据 .sub_menu 的宽度调整 */
     padding: 18px 0;
     z-index: 9999;
     background: #fff;
@@ -289,6 +289,8 @@
     box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.3);
     box-sizing: border-box;
 }
+
+
 .sub_menu::after {
     content: "";
     position: absolute;
@@ -313,7 +315,16 @@
     color: #fff;
     background: #285add;
 }
-
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+.btn-area .next.disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
 .util_space em {
     display: inline-block;
     line-height: 30px;
