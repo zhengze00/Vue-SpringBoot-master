@@ -35,28 +35,28 @@
               <li class="fix">
                 <strong>Phone number:</strong>
                 <span class="input-style">
-                  <input type="text" v-model="phoneNumber" placeholder="" />
-                </span>
+                    <input type="text" v-model="phoneNumber" placeholder="" />
+                  </span>
               </li>
               <li class="fix">
                 <strong>Category:</strong>
                 <span class="input-style">
-                  <select v-model="category">
-                    <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
-                  </select>
-                </span>
+                    <select v-model="category">
+                      <option v-for="option in categories" :key="option" :value="option">{{ option }}</option>
+                    </select>
+                  </span>
               </li>
               <li class="fix">
                 <strong>Price Range(Min):</strong>
                 <span class="input-style">
-                  <input type="text" v-model="priceMin" placeholder="" />
-                </span>
+                    <input type="text" v-model="priceMin" placeholder="" />
+                  </span>
               </li>
               <li class="fix">
                 <strong>Price Range(Max):</strong>
                 <span class="input-style">
-                  <input type="text" v-model="priceMax" placeholder="" />
-                </span>
+                    <input type="text" v-model="priceMax" placeholder="" />
+                  </span>
               </li>
             </ul>
             <div class="search-btn">
@@ -96,17 +96,22 @@
                           @input="formatPhoneNumber"
                           maxlength="13"
                       />
-                      <input v-model="form.price" @input="formatPrice" placeholder="" />
-                      <select v-model="form.status">
+                      <input v-model="form.price" @input="formatPrice" placeholder="" />                      <select v-model="form.status">
                         <option value="Selling">Selling</option>
                         <option value="SoldOut">SoldOut</option>
                       </select>
                       <input type="date" v-model="form.uploadDate" />
                     </div>
                   </div>
+                  <div class="error-message" v-if="errorMessage">{{ errorMessage }}</div>
                   <div class="btn-area">
                     <a @click="showModal = false">Cancel</a>
-                    <a class="next" @click="submitForm">Submit</a>
+                    <a
+                        class="next"
+                        @click="submitForm"
+                        :class="{ disabled: errorMessage }"
+                        :style="{ cursor: errorMessage ? 'not-allowed' : 'pointer' }"
+                    >Submit</a>
                   </div>
                 </div>
               </div>
@@ -309,11 +314,11 @@ export default {
           this.form.price = number.toLocaleString('en-MY');
         }
       }
-
     },
     updatePrice(event) {
-      // 将输入框的值设置为计算属性
-      this.formattedPrice = event.target.value;
+      // 将用户输入的值（可能包含千位分隔符）转化为原始数值
+      const value = event.target.value.replace(/,/g, '');
+      this.form.price = value;
     },
     async fetchSalePhnNums() {
       try {
@@ -383,12 +388,22 @@ export default {
     },
     submitForm() {
       if (Object.values(this.form).some(value => value === '')) {
-        alert('Please fill in all fields.');
+        this.errorMessage = 'Please fill in all fields.';
         return;
       }
-      const token = localStorage.getItem('token');
-      const numericPrice = parseFloat(this.form.price.replace(/,/g, ''));
 
+      // Validate phone number prefix
+      const phoneNumber = this.form.phoneNumber.replace(/-/g, '');
+      const numericPrice = parseFloat(this.form.price.replace(/,/g, ''));
+      const prefixNumber = this.form.prefixNumber;
+      if (!phoneNumber.startsWith(prefixNumber)) {
+        this.errorMessage = 'Phone number does not match the selected prefix number.';
+        return;
+      }
+
+      this.errorMessage = ''; // Clear error message if valid
+
+      const token = localStorage.getItem('token');
       axios.post('http://localhost:8081/upload_phone', {
         sale_phn_pfx_cd: this.form.prefixNumber,
         sale_ctgr_cd: this.form.category,
@@ -396,7 +411,7 @@ export default {
         sale_price: numericPrice,
         sale_status_cd: this.form.status,
         rgst_dt: this.form.uploadDate,
-        user_typ_cd: this.form.user_typ_cd,  // 发送 user_typ_cd
+        user_typ_cd: this.form.user_typ_cd,
         user_nm: this.form.user_nm
       }, {
         headers: {
@@ -404,7 +419,7 @@ export default {
         }
       })
           .then(() => {
-            alert('Phone number upload successfully!');
+            alert('Phone number uploaded successfully!');
             this.showModal = false;
             this.form = {
               prefixNumber: '',
@@ -413,10 +428,10 @@ export default {
               price: '',
               status: '',
               uploadDate: new Date().toISOString().substr(0, 10),
-              user_typ_cd: localStorage.getItem('user_typ_cd'), // 重置为 localStorage 中的值
+              user_typ_cd: localStorage.getItem('user_typ_cd'),
               user_nm: localStorage.getItem('user_nm')
             };
-            this.fetchSalePhnNums(); // 刷新数据
+            this.fetchSalePhnNums(); // Refresh data
           })
           .catch(error => {
             console.error('Error submitting form:', error);
@@ -494,16 +509,14 @@ export default {
   },
   computed: {
     formattedPrice: {
-      // 格式化显示价格
       get() {
         // 将原始价格格式化为千位分隔符形式
-        const number = parseFloat(this.editForm.price);
+        const number = parseFloat(this.form.price);
         return isNaN(number) ? '' : number.toLocaleString('en-MY');
       },
-      // 更新原始价格数据
       set(value) {
         // 去掉千位分隔符，更新原始数据
-        this.editForm.price = value.replace(/,/g, '');
+        this.form.price = value.replace(/,/g, '');
       }
     },
     totalPages() {
