@@ -96,7 +96,8 @@
                           @input="formatPhoneNumber"
                           maxlength="13"
                       />
-                      <input v-model="form.price" @input="formatPrice" placeholder="" />                      <select v-model="form.status">
+                      <input v-model="form.price" @input="formatPrice" placeholder="" />
+                      <select v-model="form.status">
                         <option value="Selling">Selling</option>
                         <option value="SoldOut">SoldOut</option>
                       </select>
@@ -109,7 +110,7 @@
                     <a
                         class="next"
                         @click="submitForm"
-                        :class="{ disabled: errorMessage }"
+                        :class="{ disabled: !!errorMessage }"
                         :style="{ cursor: errorMessage ? 'not-allowed' : 'pointer' }"
                     >Submit</a>
                   </div>
@@ -207,8 +208,9 @@
                   <input type="date" v-model="editForm.uploadDate" />
                 </div>
               </div>
+              <div class="error-message" v-if="errorMessage">{{ errorMessage }}</div> <!-- 显示错误消息 -->
               <div class="btn-area">
-                <a class="close-btn" @click="showModal = false">Cancel</a>
+                <a class="close-btn" @click="showEditModal = false">Cancel</a>
                 <a class="next" @click="updateData">Update</a>
               </div>
             </div>
@@ -266,7 +268,7 @@ export default {
       userContact: '', // 添加
       userBankAcc: '', // 添加
       form: {
-        prefixNumber: '', // 默认选择010
+        prefixNumber: '',
         category: '',
         phoneNumber: '',
         price: '',
@@ -317,8 +319,9 @@ export default {
     },
     updatePrice(event) {
       // 将用户输入的值（可能包含千位分隔符）转化为原始数值
-      const value = event.target.value.replace(/,/g, '');
-      this.form.price = value;
+/*      this.form.price = value;
+      const value = event.target.value.replace(/,/g, '');*/
+      this.formattedPrice = event.target.value;
     },
     async fetchSalePhnNums() {
       try {
@@ -352,6 +355,8 @@ export default {
 
       // Update the input field
       this.form.phoneNumber = value;
+
+      this.errorMessage = '';
     },
     checkAdminAccess() {
       const userTypeCd = localStorage.getItem('user_typ_cd');
@@ -387,6 +392,8 @@ export default {
       this.currentPage = 1; // 重置到第一页
     },
     submitForm() {
+      this.errorMessage = '';
+
       if (Object.values(this.form).some(value => value === '')) {
         this.errorMessage = 'Please fill in all fields.';
         return;
@@ -450,6 +457,15 @@ export default {
       this.showEditModal = true;
     },
     updateData() {
+      const phoneNumber = this.editForm.phoneNumber.replace(/-/g, '');
+      const prefixNumber = this.editForm.prefixNumber;
+
+      if (!phoneNumber.startsWith(prefixNumber)) {
+        this.errorMessage = 'Phone number does not match the selected prefix number.';
+        return;
+      }
+      // 清除错误消息
+      this.errorMessage = '';
       const token = localStorage.getItem('token');
       axios.post('http://localhost:8081/update_phone', {
         sale_phn_pfx_cd: this.editForm.prefixNumber,
@@ -511,12 +527,13 @@ export default {
     formattedPrice: {
       get() {
         // 将原始价格格式化为千位分隔符形式
-        const number = parseFloat(this.form.price);
+        const number = parseFloat(this.editForm.price);
         return isNaN(number) ? '' : number.toLocaleString('en-MY');
       },
+      // 更新原始价格数据
       set(value) {
         // 去掉千位分隔符，更新原始数据
-        this.form.price = value.replace(/,/g, '');
+        this.editForm.price = value.replace(/,/g, '');
       }
     },
     totalPages() {
