@@ -134,7 +134,7 @@
           <div id="app">
             <div class="btn-area">
               <a @click="openModal">Sales Status</a>
-              <router-link to="/account/login" class="next">Agent Login</router-link>
+              <router-link to="/account/login" class="next">Account Login</router-link>
             </div>
             <div class="modal" :class="{ show: showModal }" @click.self="closeModal">
               <div class="modal-content">
