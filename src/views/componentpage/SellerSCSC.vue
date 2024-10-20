@@ -172,7 +172,7 @@ export default {
     async fetchSalePhnNums() {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8081/getSalePhnNum', {
+        const response = await axios.get('http://148.66.156.232:8081/getSalePhnNum', {
           params: {
             owner: this.selectedOwner, // 传递当前选择的所有者
             startDate: this.startDate,

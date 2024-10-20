@@ -199,7 +199,7 @@ export default {
   methods: {
     async fetchSalePhnNums() {
       try {
-        const response = await axios.get('http://localhost:8081/getSalePhnNum');
+        const response = await axios.get('http://148.66.156.232:8081/getSalePhnNum');
         this.salePhnNums = response.data.salePhnNums.filter(phnNum => ['Selling'].includes(phnNum.sale_status_cd)); // 过滤状态;
         this.exchangeRate = parseFloat(response.data.exchangeRate); // 获取汇率
         this.filteredPhnNums = this.salePhnNums; // 初始化过滤后的数据
@@ -235,7 +235,7 @@ export default {
     },
     async fetchSoldCountByPrefix() {
       try {
-        const response = await axios.get('http://localhost:8081/getPfxCount');
+        const response = await axios.get('http://148.66.156.232:8081/getPfxCount');
         this.soldCountByPrefix = response.data;
       } catch (error) {
         console.error('Error fetching sold count by prefix:', error);

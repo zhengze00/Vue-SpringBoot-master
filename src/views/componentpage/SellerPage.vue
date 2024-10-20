@@ -325,7 +325,7 @@ export default {
     },
     async fetchSalePhnNums() {
       try {
-        const response = await axios.get('http://localhost:8081/getSalePhnNum', {
+        const response = await axios.get('http://148.66.156.232:8081/getSalePhnNum', {
           headers: {
             token: localStorage.getItem('token')
           }
@@ -411,7 +411,7 @@ export default {
       this.errorMessage = ''; // Clear error message if valid
 
       const token = localStorage.getItem('token');
-      axios.post('http://localhost:8081/upload_phone', {
+      axios.post('http://148.66.156.232:8081/upload_phone', {
         sale_phn_pfx_cd: this.form.prefixNumber,
         sale_ctgr_cd: this.form.category,
         sale_phn_num: this.form.phoneNumber,
@@ -467,7 +467,7 @@ export default {
       // 清除错误消息
       this.errorMessage = '';
       const token = localStorage.getItem('token');
-      axios.post('http://localhost:8081/update_phone', {
+      axios.post('http://148.66.156.232:8081/update_phone', {
         sale_phn_pfx_cd: this.editForm.prefixNumber,
         sale_ctgr_cd: this.editForm.category,
         sale_phn_num: this.editForm.phoneNumber,
@@ -506,7 +506,7 @@ export default {
       if (this.recordToDelete) {
         try {
           const token = localStorage.getItem('token');
-          await axios.post('http://localhost:8081/delete_phone', {sale_id: this.recordToDelete}, {
+          await axios.post('http://148.66.156.232:8081/delete_phone', {sale_id: this.recordToDelete}, {
             headers: {token: `${token}`}
           });
           this.fetchSalePhnNums(); // 刷新数据
